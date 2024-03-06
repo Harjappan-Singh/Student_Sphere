@@ -12,6 +12,7 @@ public class App
         StudentDaoInterface IStudentDao = new MySqlStudentDao();
         try
         {
+            /*
             System.out.println("\nCall findAllStudents()");
             List<Student> students = IStudentDao.findAllStudents();
 
@@ -21,6 +22,17 @@ public class App
                 for (Student st : students)
                     System.out.println("Student: " + st.toString());
             }
+            */
+
+            System.out.println("\nCall findStudentById()");
+
+            int userId = 5;
+            Student student = IStudentDao.findStudentById(userId);
+
+            if( student != null )
+                System.out.println("Student found: " + student);
+            else
+                System.out.println("Student with that student ID not found");
         }
         catch( DaoException e )
         {

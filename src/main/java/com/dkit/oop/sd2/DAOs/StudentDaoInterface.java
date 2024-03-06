@@ -8,6 +8,7 @@ import java.util.List;
 public interface StudentDaoInterface
 {
     public List<Student> findAllStudents() throws DaoException;
+    public Student findStudentById(int studentId) throws DaoException;
 
 }
 
