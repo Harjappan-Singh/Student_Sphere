@@ -1,13 +1,4 @@
 package com.dkit.oop.sd2.DAOs;
-/** MySqlDao -
- * - implements functionality that is common to all MySQL DAOs
- * - i.e. getConection() and freeConnection()
- * All MySQL DAOs will extend (inherit from) this class in order to
- * gain the connection functionality, thus avoiding inclusion
- * of this code in every DAO class.
- *
- */
-
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
@@ -18,7 +9,7 @@ public class MySqlDao
     public Connection getConnection() throws DaoException
     {
         String driver = "com.mysql.cj.jdbc.Driver";
-        String url = "jdbc:mysql://localhost:3306/user_database";
+        String url = "jdbc:mysql://localhost:3306/student_sphere";
         String username = "root";
         String password = "";
         Connection connection = null;
