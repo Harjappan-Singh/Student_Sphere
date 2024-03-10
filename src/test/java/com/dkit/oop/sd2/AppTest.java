@@ -12,6 +12,7 @@ import org.junit.Test;
  */
 public class AppTest 
 {
+
     StudentDaoInterface IStudentDao = new MySqlStudentDao();
     /**
      * Rigorous Test :-)
@@ -24,7 +25,7 @@ public class AppTest
 
             Student s = IStudentDao.findStudentById(5);
 
-            assertEquals(s.getStudentId(), 5);
+            assertEquals(s.getid(), 5);
 
         }catch (DaoException e){
             e.printStackTrace();

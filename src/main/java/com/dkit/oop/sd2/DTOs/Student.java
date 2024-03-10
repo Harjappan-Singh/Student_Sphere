@@ -3,7 +3,7 @@ package com.dkit.oop.sd2.DTOs;
 import java.time.LocalDate;
 
 public class Student {
-    private int studentId;
+    private int id;
     private String firstName;
     private String lastName;
     private String birthDate;
@@ -17,8 +17,8 @@ public class Student {
     private int graduationYear;
     private double currentGPA;
 
-    public Student(int studentId, String firstName, String lastName, String birthDate, String studentEmail, String studentPhone, String address, String courseFullName, String courseStatus, boolean hasPaidFullFee, String classGroup, int graduationYear, double currentGPA) {
-        this.studentId = studentId;
+    public Student(int id, String firstName, String lastName, String birthDate, String studentEmail, String studentPhone, String address, String courseFullName, String courseStatus, boolean hasPaidFullFee, String classGroup, int graduationYear, double currentGPA) {
+        this.id = id;
         this.firstName = firstName;
         this.lastName = lastName;
         this.birthDate = birthDate;
@@ -51,12 +51,12 @@ public class Student {
     public Student() {
     }
 
-    public int getStudentId() {
-        return studentId;
+    public int getid() {
+        return id;
     }
 
-    public void setStudentId(int studentId) {
-        this.studentId = studentId;
+    public void setid(int id) {
+        this.id = id;
     }
 
     public String getFirstName() {
@@ -158,7 +158,7 @@ public class Student {
     @Override
     public String toString() {
         return "Student{" +
-                "studentId=" + studentId +
+                "id=" + id +
                 ", firstName='" + firstName + '\'' +
                 ", lastName='" + lastName + '\'' +
                 ", birthDate=" + birthDate +

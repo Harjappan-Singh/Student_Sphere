@@ -5,7 +5,7 @@ USE student_sphere;
 DROP TABLE IF EXISTS students;
 
 CREATE TABLE students (
-        student_id INT AUTO_INCREMENT PRIMARY KEY,
+        id INT AUTO_INCREMENT PRIMARY KEY,
         first_name VARCHAR(20) NOT NULL,
 		last_name VARCHAR(20) NOT NULL,
 		birth_date DATE NOT NULL,
@@ -18,7 +18,7 @@ CREATE TABLE students (
 		class_group VARCHAR(5),
 		graduation_year YEAR NOT NULL,
 		current_gpa DOUBLE
-		);
+		)
 
 INSERT INTO students (first_name, last_name, birth_date, student_email, student_phone, address, course_full_name, course_status, graduation_year, has_paid_full_fee, class_group, current_gpa)
 VALUES

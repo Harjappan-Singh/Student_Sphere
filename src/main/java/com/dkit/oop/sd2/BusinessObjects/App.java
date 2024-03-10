@@ -72,11 +72,11 @@ public class App
     public static void displayByIDOption(){
         try
         {
-            int userId;
-            System.out.println("Please enter the user id: ");
+            int id;
+            System.out.println("Please enter the student id: ");
             Scanner kbr = new Scanner(System.in);
-            userId = kbr.nextInt();
-            Student student = IStudentDao.findStudentById(userId);
+            id = kbr.nextInt();
+            Student student = IStudentDao.findStudentById(id);
 
             if( student != null )
                 System.out.println("Student found: " + student);

@@ -30,7 +30,7 @@ public class MySqlStudentDao extends MySqlDao implements StudentDaoInterface{
             resultSet = preparedStatement.executeQuery();
             while (resultSet.next())
             {
-                int studentId = resultSet.getInt("student_id");
+                int id = resultSet.getInt("id");
                 String firstName = resultSet.getString("first_name");
                 String lastName = resultSet.getString("last_name");
                 String birthDate = resultSet.getString("birth_date");
@@ -44,7 +44,7 @@ public class MySqlStudentDao extends MySqlDao implements StudentDaoInterface{
                 int graduationYear = resultSet.getInt("graduation_year");
                 double currentGPA = resultSet.getInt("current_gpa");
 
-                Student s = new Student(studentId, firstName,lastName, birthDate, studentEmail, studentPhone, address,courseFullName, courseStatus, hasPaidFullFee,classGroup, graduationYear, currentGPA);
+                Student s = new Student(id, firstName,lastName, birthDate, studentEmail, studentPhone, address,courseFullName, courseStatus, hasPaidFullFee,classGroup, graduationYear, currentGPA);
                 studentList.add(s);
             }
         } catch (SQLException e)
@@ -75,7 +75,7 @@ public class MySqlStudentDao extends MySqlDao implements StudentDaoInterface{
     }
 
     @Override
-    public Student findStudentById(int studentId) throws DaoException
+    public Student findStudentById(int id) throws DaoException
     {
         Connection connection = null;
         PreparedStatement preparedStatement = null;
@@ -85,9 +85,9 @@ public class MySqlStudentDao extends MySqlDao implements StudentDaoInterface{
         {
             connection = this.getConnection();
 
-            String query = "SELECT * FROM STUDENTS WHERE STUDENT_ID = ?";
+            String query = "SELECT * FROM STUDENTS WHERE id = ?";
             preparedStatement = connection.prepareStatement(query);
-            preparedStatement.setInt(1, studentId);
+            preparedStatement.setInt(1, id);
 
             resultSet = preparedStatement.executeQuery();
             if (resultSet.next())
@@ -105,7 +105,7 @@ public class MySqlStudentDao extends MySqlDao implements StudentDaoInterface{
                 int graduationYear = resultSet.getInt("graduation_year");
                 double currentGPA = resultSet.getInt("current_gpa");
 
-                student = new Student(studentId, firstName,lastName, birthDate, studentEmail, studentPhone, address,courseFullName, courseStatus, hasPaidFullFee,classGroup, graduationYear, currentGPA);
+                student = new Student(id, firstName,lastName, birthDate, studentEmail, studentPhone, address,courseFullName, courseStatus, hasPaidFullFee,classGroup, graduationYear, currentGPA);
             }
         } catch (SQLException e)
         {
@@ -134,7 +134,7 @@ public class MySqlStudentDao extends MySqlDao implements StudentDaoInterface{
         return student;
     }
     @Override
-    public int deleteStudentById(int studentId) throws DaoException
+    public int deleteStudentById(int id) throws DaoException
     {
         Connection connection = null;
         PreparedStatement preparedStatement = null;
@@ -143,9 +143,9 @@ public class MySqlStudentDao extends MySqlDao implements StudentDaoInterface{
         try
         {
             connection = this.getConnection();
-            String query = "DELETE  FROM STUDENTS WHERE STUDENT_ID = ?";
+            String query = "DELETE  FROM STUDENTS WHERE id = ?";
             preparedStatement = connection.prepareStatement(query);
-            preparedStatement.setInt(1, studentId);
+            preparedStatement.setInt(1, id);
             delStudent = preparedStatement.executeUpdate();
 
         }catch(SQLException e)
@@ -181,7 +181,7 @@ public class MySqlStudentDao extends MySqlDao implements StudentDaoInterface{
             connection = this.getConnection();
 
 
-            String query = "INSERT INTO STUDENTS(student_id,first_name, last_name, birth_date, student_email, student_phone, address, course_full_name, course_status, has_paid_full_fee, class_group, graduation_year, current_gpa) " +
+            String query = "INSERT INTO STUDENTS(id,first_name, last_name, birth_date, student_email, student_phone, address, course_full_name, course_status, has_paid_full_fee, class_group, graduation_year, current_gpa) " +
                     "VALUES (null,?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
 
             preparedStatement = connection.prepareStatement(query);

@@ -8,8 +8,8 @@ import java.util.List;
 public interface StudentDaoInterface
 {
     public List<Student> findAllStudents() throws DaoException;
-    public Student findStudentById(int studentId) throws DaoException;
-    public int deleteStudentById(int studentId) throws DaoException;
+    public Student findStudentById(int id) throws DaoException;
+    public int deleteStudentById(int id) throws DaoException;
     void insertNewStudent(Student student) throws DaoException;
 
 }
