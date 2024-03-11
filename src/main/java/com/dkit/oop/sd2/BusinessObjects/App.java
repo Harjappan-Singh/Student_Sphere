@@ -7,6 +7,7 @@ import com.dkit.oop.sd2.Exceptions.DaoException;
 import java.sql.Date;
 import java.util.List;
 import java.util.Scanner;
+import com.google.gson.Gson;
 
 public class App
 {
@@ -59,8 +60,12 @@ public class App
             List<Student> students = IStudentDao.findAllStudents();
 
             if( students.isEmpty() )
+            {
                 System.out.println("There are no students");
+            }
+
             else {
+                String studenListJSON = studentsListToJson(students);
                 for (Student st : students)
                     System.out.println("Student: " + st.toString());
             }
@@ -80,8 +85,10 @@ public class App
             id = kbr.nextInt();
             Student student = IStudentDao.findStudentById(id);
 
-            if( student != null )
+            if( student != null ) {
+                String studentJson = studentToJson(student);
                 System.out.println("Student found: " + student);
+            }
             else
                 System.out.println("Student with that student ID not found");
         }
@@ -174,5 +181,33 @@ public class App
             System.out.println("Error adding new student: " + e.getMessage());
             e.printStackTrace();
         }
+    }
+    /**
+
+     * Author: Harjappan Singh
+
+     * Date: 11-Mar 2024
+
+     */
+    public static String studentToJson( Student s ){
+        Gson gsonParser = new Gson();
+        String studentJSON =  gsonParser.toJson(s);
+//        System.out.println("Student JSON String is:\n" + studentJSON);
+        return studentJSON;
+    }
+
+    /**
+
+     * Author: Harjappan Singh
+
+     * Date: 11-Mar 2024
+
+     */
+    public static String studentsListToJson( List<Student> list ){
+        Gson gsonParser = new Gson();
+        String studentListJson =  gsonParser.toJson(list);
+        System.out.println("Student List JSON String is:\n" + studentListJson);
+        return studentListJson;
+
     }
 }
