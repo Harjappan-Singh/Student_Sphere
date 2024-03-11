@@ -9,6 +9,13 @@ import java.util.List;
 
 public class MySqlStudentDao extends MySqlDao implements StudentDaoInterface{
 
+    /**
+
+     * Author: Conor Gilbert
+
+     * Date: 7-Mar 2024
+
+     */
     @Override
     public List<Student> findAllStudents() throws DaoException
     {
@@ -72,6 +79,15 @@ public class MySqlStudentDao extends MySqlDao implements StudentDaoInterface{
         return studentList;
     }
 
+
+
+    /**
+
+     * Author: Harjappan Singh
+
+     * Date: 6-Mar 2024
+
+     */
     @Override
     public Student findStudentById(int id) throws DaoException
     {
@@ -131,6 +147,14 @@ public class MySqlStudentDao extends MySqlDao implements StudentDaoInterface{
         }
         return student;
     }
+
+    /**
+
+     * Author: Conor Gilbert
+
+     * Date: 7-Mar 2024
+
+     */
     @Override
     public int deleteStudentById(int id) throws DaoException
     {
@@ -171,6 +195,14 @@ public class MySqlStudentDao extends MySqlDao implements StudentDaoInterface{
         return delStudent;
     }
 
+
+    /**
+
+     * Author: Meghana Rathnam
+
+     * Date: 7-Mar 2024
+
+     */
     @Override
     public void insertNewStudent(Student student) throws DaoException {
         Connection connection = null;
