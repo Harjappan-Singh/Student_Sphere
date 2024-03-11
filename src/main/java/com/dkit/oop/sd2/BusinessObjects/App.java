@@ -3,6 +3,8 @@ import com.dkit.oop.sd2.DAOs.MySqlStudentDao;
 import com.dkit.oop.sd2.DAOs.StudentDaoInterface;
 import com.dkit.oop.sd2.DTOs.Student;
 import com.dkit.oop.sd2.Exceptions.DaoException;
+
+import java.sql.Date;
 import java.util.List;
 import java.util.Scanner;
 
@@ -131,7 +133,7 @@ public class App
             sc.nextLine();
 
             System.out.print("Birth Date (YYYY-MM-DD): ");
-            String birthDate = sc.nextLine();
+            Date birthDate = Date.valueOf(sc.nextLine());
 
             System.out.print("Email: ");
             String email = sc.next();

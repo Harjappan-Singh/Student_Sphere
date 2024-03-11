@@ -3,10 +3,7 @@ package com.dkit.oop.sd2.DAOs;
 import com.dkit.oop.sd2.DTOs.Student;
 import com.dkit.oop.sd2.Exceptions.DaoException;
 
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
+import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -33,7 +30,8 @@ public class MySqlStudentDao extends MySqlDao implements StudentDaoInterface{
                 int id = resultSet.getInt("id");
                 String firstName = resultSet.getString("first_name");
                 String lastName = resultSet.getString("last_name");
-                String birthDate = resultSet.getString("birth_date");
+                Date birthDate = resultSet.getDate("birth_date");
+//                Date birthDate = Date.parse(resultSet.getString("birth_date"));
                 String studentEmail = resultSet.getString("student_email");
                 String studentPhone = resultSet.getString("student_phone");
                 String address = resultSet.getString("address");
@@ -94,7 +92,7 @@ public class MySqlStudentDao extends MySqlDao implements StudentDaoInterface{
             {
                 String firstName = resultSet.getString("first_name");
                 String lastName = resultSet.getString("last_name");
-                String birthDate = resultSet.getString("birth_date");
+                Date birthDate = resultSet.getDate("birth_date");
                 String studentEmail = resultSet.getString("student_email");
                 String studentPhone = resultSet.getString("student_phone");
                 String address = resultSet.getString("address");
@@ -189,7 +187,7 @@ public class MySqlStudentDao extends MySqlDao implements StudentDaoInterface{
 
             preparedStatement.setString(1, student.getFirstName());
             preparedStatement.setString(2, student.getLastName());
-            preparedStatement.setString(3, student.getBirthDate());
+            preparedStatement.setDate(3, student.getBirthDate());
             preparedStatement.setString(4, student.getStudentEmail());
             preparedStatement.setString(5, student.getStudentPhone());
             preparedStatement.setString(6, student.getAddress());

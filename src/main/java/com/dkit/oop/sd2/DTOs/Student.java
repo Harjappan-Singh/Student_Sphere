@@ -1,12 +1,12 @@
 package com.dkit.oop.sd2.DTOs;
 
-import java.time.LocalDate;
+import java.sql.Date;
 
 public class Student {
     private int id;
     private String firstName;
     private String lastName;
-    private String birthDate;
+    private Date birthDate;
     private String studentEmail;
     private String studentPhone;
     private String address;
@@ -17,7 +17,7 @@ public class Student {
     private int graduationYear;
     private double currentGPA;
 
-    public Student(int id, String firstName, String lastName, String birthDate, String studentEmail, String studentPhone, String address, String courseFullName, String courseStatus, boolean hasPaidFullFee, String classGroup, int graduationYear, double currentGPA) {
+    public Student(int id, String firstName, String lastName, Date birthDate, String studentEmail, String studentPhone, String address, String courseFullName, String courseStatus, boolean hasPaidFullFee, String classGroup, int graduationYear, double currentGPA) {
         this.id = id;
         this.firstName = firstName;
         this.lastName = lastName;
@@ -33,7 +33,7 @@ public class Student {
         this.currentGPA = currentGPA;
     }
 
-    public Student(String firstName, String lastName, String birthDate, String studentEmail, String studentPhone, String address, String courseFullName, String courseStatus, boolean hasPaidFullFee, String classGroup, int graduationYear, double currentGPA) {
+    public Student(String firstName, String lastName, Date birthDate, String studentEmail, String studentPhone, String address, String courseFullName, String courseStatus, boolean hasPaidFullFee, String classGroup, int graduationYear, double currentGPA) {
         this.firstName = firstName;
         this.lastName = lastName;
         this.birthDate = birthDate;
@@ -75,11 +75,11 @@ public class Student {
         this.lastName = lastName;
     }
 
-    public String getBirthDate() {
+    public Date getBirthDate() {
         return birthDate;
     }
 
-    public void setBirthDate(String birthDate) {
+    public void setBirthDate(Date birthDate) {
         this.birthDate = birthDate;
     }
 
