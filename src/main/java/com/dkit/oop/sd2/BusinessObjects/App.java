@@ -65,7 +65,7 @@ public class App
             }
 
             else {
-                String studenListJSON = studentsListToJson(students);
+                String studenListJSON = JSONConverter.studentsListToJson(students);
                 for (Student st : students)
                     System.out.println("Student: " + st.toString());
             }
@@ -86,7 +86,8 @@ public class App
             Student student = IStudentDao.findStudentById(id);
 
             if( student != null ) {
-                String studentJson = studentToJson(student);
+
+                String studentJSON = JSONConverter.studentToJson(student);
                 System.out.println("Student found: " + student);
             }
             else
@@ -181,33 +182,5 @@ public class App
             System.out.println("Error adding new student: " + e.getMessage());
             e.printStackTrace();
         }
-    }
-    /**
-
-     * Author: Harjappan Singh
-
-     * Date: 11-Mar 2024
-
-     */
-    public static String studentToJson( Student s ){
-        Gson gsonParser = new Gson();
-        String studentJSON =  gsonParser.toJson(s);
-//        System.out.println("Student JSON String is:\n" + studentJSON);
-        return studentJSON;
-    }
-
-    /**
-
-     * Author: Harjappan Singh
-
-     * Date: 11-Mar 2024
-
-     */
-    public static String studentsListToJson( List<Student> list ){
-        Gson gsonParser = new Gson();
-        String studentListJson =  gsonParser.toJson(list);
-        System.out.println("Student List JSON String is:\n" + studentListJson);
-        return studentListJson;
-
     }
 }
