@@ -24,7 +24,8 @@ public class App
             System.out.println("3. Delete student by an id");
             System.out.println("4. Add a new student");
             System.out.println("5. Update an existing student by id");
-            System.out.println("6. Exit");
+            System.out.println("6. Filter students by their age");
+            System.out.println("7. Exit");
             System.out.print("Choose an option: ");
 
             Scanner sc = new Scanner(System.in);
@@ -47,11 +48,13 @@ public class App
                     updateStudentOption();
                     break;
                 case 6:
-                    System.out.println("ThankYou! Exiting...");
+                    findStudentUsingFilterOption();
+                    break;
+                case 7:
                 default:
                     System.out.println("Enter a valid option");
             }
-        } while (userInput !=5);
+        } while (userInput !=7);
 
     }
 
@@ -300,6 +303,45 @@ public class App
 
         } catch (DaoException e) {
             System.out.println("Error updating student: " + e.getMessage());
+            e.printStackTrace();
+        }
+    }
+    /**
+     * Author: Conor Gilbert
+     * Date: 15-Mar 2024
+     */
+    public static void findStudentUsingFilterOption ()
+    {
+        try
+        {
+            int age;
+            System.out.println("Enter an age you want to filter by: ");
+            Scanner kbr = new Scanner(System.in);
+            age = kbr.nextInt();
+            List<Student> students = IStudentDao.findStudentUsingFilter(age);
+            if(!students.isEmpty())
+            {
+                System.out.println("These are the students that are "+age+" years old");
+                System.out.printf("%-5s %-11s %-10s %-11s %-28s %-11s %-57s %-75s %-11s %-5s %-6s %-5s %-10s\n",
+                        "ID", "First Name", "Last Name", "Birth Date", "Email", "Phone", "Address", "Course Full Name",
+                        "Course Status", "Paid", "Group", "Grad Year", "GPA");
+                for(Student s : students)
+                {
+
+                    System.out.printf("%-5d %-11s %-10s %-11s %-28s %-11s %-57s %-75s %-11s %-5b %-6s %-5d %-10.2f\n",
+                            s.getid(), s.getFirstName(), s.getLastName(), s.getBirthDate(),
+                            s.getStudentEmail(), s.getStudentPhone(), s.getAddress(),
+                            s.getCourseFullName(), s.getCourseStatus(), s.isHasPaidFullFee(),
+                            s.getClassGroup(), s.getGraduationYear(), s.getCurrentGPA());
+                }
+            }
+            else
+            {
+                System.out.println("There are no students with this age");
+            }
+        }
+        catch( DaoException e )
+        {
             e.printStackTrace();
         }
     }

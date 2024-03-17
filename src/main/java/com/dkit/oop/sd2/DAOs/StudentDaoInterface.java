@@ -14,5 +14,7 @@ public interface StudentDaoInterface
 
     public void updateStudentById(int id, Student student) throws DaoException;
 
+    public List<Student> findStudentUsingFilter(int age) throws DaoException;
+
 }
 
