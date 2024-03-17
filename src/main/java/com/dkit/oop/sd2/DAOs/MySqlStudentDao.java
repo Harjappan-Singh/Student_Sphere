@@ -249,4 +249,56 @@ public class MySqlStudentDao extends MySqlDao implements StudentDaoInterface{
         }
     }
 
+    /**
+     * Author: Meghana Rathnam
+     * Date: 15-Mar 2024
+     */
+    @Override
+    public void updateStudentById(int id, Student student) throws DaoException {
+        Connection connection = null;
+        PreparedStatement preparedStatement = null;
+
+        try {
+            connection = this.getConnection();
+
+            String query = "UPDATE STUDENTS SET first_name = ?, last_name = ?, birth_date = ?, student_email = ?, student_phone = ?, " +
+                    "address = ?, course_full_name = ?, course_status = ?, has_paid_full_fee = ?, class_group = ?, graduation_year = ?, current_gpa = ? " +
+                    "WHERE id = ?";
+
+            preparedStatement = connection.prepareStatement(query);
+
+            preparedStatement.setString(1, student.getFirstName());
+            preparedStatement.setString(2, student.getLastName());
+            preparedStatement.setDate(3, student.getBirthDate());
+            preparedStatement.setString(4, student.getStudentEmail());
+            preparedStatement.setString(5, student.getStudentPhone());
+            preparedStatement.setString(6, student.getAddress());
+            preparedStatement.setString(7, student.getCourseFullName());
+            preparedStatement.setString(8, student.getCourseStatus());
+            preparedStatement.setBoolean(9, student.isHasPaidFullFee());
+            preparedStatement.setString(10, student.getClassGroup());
+            preparedStatement.setInt(11, student.getGraduationYear());
+            preparedStatement.setDouble(12, student.getCurrentGPA());
+            preparedStatement.setInt(13,id);
+
+            int affectedRows = preparedStatement.executeUpdate();
+
+            if (affectedRows == 0) {
+                throw new DaoException("Updating student failed, no rows affected.");
+            }
+        } catch (SQLException e) {
+            throw new DaoException("updateStudent() " + e.getMessage());
+        } finally {
+            try {
+                if (preparedStatement != null) {
+                    preparedStatement.close();
+                }
+                if (connection != null) {
+                    freeConnection(connection);
+                }
+            } catch (SQLException e) {
+                throw new DaoException("updateStudent() finally " + e.getMessage());
+            }
+        }
+    }
 }
