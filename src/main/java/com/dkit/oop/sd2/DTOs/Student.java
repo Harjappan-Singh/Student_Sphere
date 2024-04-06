@@ -10,53 +10,43 @@ public class Student {
     private String studentEmail;
     private String studentPhone;
     private String address;
-    private String courseFullName;
-    private String courseStatus;
-    private boolean hasPaidFullFee;
-    private String classGroup;
     private int graduationYear;
+    private boolean hasPaidFullFee;
     private double currentGPA;
-
-    public Student(int id, String firstName, String lastName, Date birthDate, String studentEmail, String studentPhone, String address, String courseFullName, String courseStatus, boolean hasPaidFullFee, String classGroup, int graduationYear, double currentGPA) {
-        this.id = id;
-        this.firstName = firstName;
-        this.lastName = lastName;
-        this.birthDate = birthDate;
-        this.studentEmail = studentEmail;
-        this.studentPhone = studentPhone;
-        this.address = address;
-        this.courseFullName = courseFullName;
-        this.courseStatus = courseStatus;
-        this.hasPaidFullFee = hasPaidFullFee;
-        this.classGroup = classGroup;
-        this.graduationYear = graduationYear;
-        this.currentGPA = currentGPA;
-    }
-
-    public Student(String firstName, String lastName, Date birthDate, String studentEmail, String studentPhone, String address, String courseFullName, String courseStatus, boolean hasPaidFullFee, String classGroup, int graduationYear, double currentGPA) {
-        this.firstName = firstName;
-        this.lastName = lastName;
-        this.birthDate = birthDate;
-        this.studentEmail = studentEmail;
-        this.studentPhone = studentPhone;
-        this.address = address;
-        this.courseFullName = courseFullName;
-        this.courseStatus = courseStatus;
-        this.hasPaidFullFee = hasPaidFullFee;
-        this.classGroup = classGroup;
-        this.graduationYear = graduationYear;
-        this.currentGPA = currentGPA;
-    }
+    private int courseId;
 
     public Student() {
     }
 
-    public int getid() {
-        return id;
+    public Student(String firstName, String lastName, Date birthDate, String studentEmail, String studentPhone, String address, int graduationYear, boolean hasPaidFullFee, double currentGPA, int courseId) {
+        this.firstName = firstName;
+        this.lastName = lastName;
+        this.birthDate = birthDate;
+        this.studentEmail = studentEmail;
+        this.studentPhone = studentPhone;
+        this.address = address;
+        this.graduationYear = graduationYear;
+        this.hasPaidFullFee = hasPaidFullFee;
+        this.currentGPA = currentGPA;
+        this.courseId = courseId;
     }
 
-    public void setid(int id) {
+    public Student(int id, String firstName, String lastName, Date birthDate, String studentEmail, String studentPhone, String address, int graduationYear, boolean hasPaidFullFee, double currentGPA, int courseId) {
         this.id = id;
+        this.firstName = firstName;
+        this.lastName = lastName;
+        this.birthDate = birthDate;
+        this.studentEmail = studentEmail;
+        this.studentPhone = studentPhone;
+        this.address = address;
+        this.graduationYear = graduationYear;
+        this.hasPaidFullFee = hasPaidFullFee;
+        this.currentGPA = currentGPA;
+        this.courseId = courseId;
+    }
+
+    public int getId() {
+        return id;
     }
 
     public String getFirstName() {
@@ -107,20 +97,12 @@ public class Student {
         this.address = address;
     }
 
-    public String getCourseFullName() {
-        return courseFullName;
+    public int getGraduationYear() {
+        return graduationYear;
     }
 
-    public void setCourseFullName(String courseFullName) {
-        this.courseFullName = courseFullName;
-    }
-
-    public String getCourseStatus() {
-        return courseStatus;
-    }
-
-    public void setCourseStatus(String courseStatus) {
-        this.courseStatus = courseStatus;
+    public void setGraduationYear(int graduationYear) {
+        this.graduationYear = graduationYear;
     }
 
     public boolean isHasPaidFullFee() {
@@ -131,28 +113,20 @@ public class Student {
         this.hasPaidFullFee = hasPaidFullFee;
     }
 
-    public String getClassGroup() {
-        return classGroup;
-    }
-
-    public void setClassGroup(String classGroup) {
-        this.classGroup = classGroup;
-    }
-
-    public int getGraduationYear() {
-        return graduationYear;
-    }
-
-    public void setGraduationYear(int graduationYear) {
-        this.graduationYear = graduationYear;
-    }
-
     public double getCurrentGPA() {
         return currentGPA;
     }
 
     public void setCurrentGPA(double currentGPA) {
         this.currentGPA = currentGPA;
+    }
+
+    public int getCourseId() {
+        return courseId;
+    }
+
+    public void setCourseId(int courseId) {
+        this.courseId = courseId;
     }
 
     @Override
@@ -165,12 +139,10 @@ public class Student {
                 ", studentEmail='" + studentEmail + '\'' +
                 ", studentPhone='" + studentPhone + '\'' +
                 ", address='" + address + '\'' +
-                ", courseFullName='" + courseFullName + '\'' +
-                ", courseStatus='" + courseStatus + '\'' +
-                ", hasPaidFullFee=" + hasPaidFullFee +
-                ", classGroup='" + classGroup + '\'' +
                 ", graduationYear=" + graduationYear +
+                ", hasPaidFullFee=" + hasPaidFullFee +
                 ", currentGPA=" + currentGPA +
+                ", courseId=" + courseId +
                 '}';
     }
 }
