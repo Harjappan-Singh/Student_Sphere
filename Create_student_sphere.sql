@@ -1,3 +1,11 @@
+/**
+//
+//     * Author: Harjappan Singh
+//
+//     * Date: 5-April 2024
+//
+//     */
+
 DROP DATABASE IF EXISTS student_sphere;
 CREATE DATABASE student_sphere;
 USE student_sphere;

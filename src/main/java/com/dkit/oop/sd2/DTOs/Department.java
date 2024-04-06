@@ -32,7 +32,7 @@ public class Department {
     public String toString() {
         return "Department{" +
                 "departmentID=" + departmentID +
-                ", getDepartmentName='" + departmentName + '\'' +
+                ", DepartmentName='" + departmentName + '\'' +
                 '}';
     }
 }

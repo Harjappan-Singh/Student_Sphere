@@ -2,12 +2,10 @@ package com.dkit.oop.sd2.DAOs;
 
 import com.dkit.oop.sd2.DTOs.Department;
 import com.dkit.oop.sd2.DTOs.Module;
+import com.dkit.oop.sd2.DTOs.Student;
 import com.dkit.oop.sd2.Exceptions.DaoException;
 
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
+import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -64,5 +62,53 @@ public class MySqlModuleDAO extends MySqlDao implements ModuleDAOInterface {
         }
         return moduleList;
     }
+    @Override
+    public Module findModuleById(int id) throws DaoException
+    {
+        Connection connection = null;
+        PreparedStatement preparedStatement = null;
+        ResultSet resultSet = null;
+        Module md = null;
+        try
+        {
+            connection = this.getConnection();
 
+            String query = "SELECT * FROM Modules WHERE module_id = ?";
+            preparedStatement = connection.prepareStatement(query);
+            preparedStatement.setInt(1, id);
+
+            resultSet = preparedStatement.executeQuery();
+            if (resultSet.next())
+            {
+                String moduleName = resultSet.getString("module_name");
+                int credits = resultSet.getInt("credits");
+
+                md = new Module(id, moduleName, credits);
+            }
+        } catch (SQLException e)
+        {
+            throw new DaoException("findModuleByIdResultSet() " + e.getMessage());
+        }
+        {
+            try
+            {
+                if (resultSet != null)
+                {
+                    resultSet.close();
+                }
+                if (preparedStatement != null)
+                {
+                    preparedStatement.close();
+                }
+                if (connection != null)
+                {
+                    freeConnection(connection);
+                }
+            } catch (SQLException e)
+            {
+                throw new DaoException("findModuleById() " + e.getMessage());
+            }
+        }
+        return md;
+    }
 }

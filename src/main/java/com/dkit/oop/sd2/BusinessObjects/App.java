@@ -24,7 +24,7 @@ public class App
         int userInput = 0;
         do {
             System.out.println("1. Display options");
-            System.out.println("2. Display student by an id");
+            System.out.println("2. Display by unique id options");
             System.out.println("3. Delete student by an id");
             System.out.println("4. Add a new student");
             System.out.println("5. Update an existing student by id");
@@ -40,7 +40,7 @@ public class App
                     displayOption();
                     break;
                 case 2:
-//                    displayByIDOption();
+                    displayByIDOption();
                     break;
                 case 3:
 //                    deleteByIdOption();
@@ -55,6 +55,7 @@ public class App
 //                    findStudentUsingFilterOption();
                     break;
                 case 7:
+                    break;
                 default:
                     System.out.println("Enter a valid option");
             }
@@ -62,6 +63,13 @@ public class App
 
     }
 
+    /**
+     //
+     //     * Author: Harjappan Singh
+     //
+     //     * Date: 5-April 2024
+     //
+     //     */
     public static void displayOption(){
         int userInput = 0;
 
@@ -97,6 +105,13 @@ public class App
         } while (userInput !=5);
     }
 
+    /**
+     //
+     //     * Author: Harjappan Singh
+     //
+     //     * Date: 5-April 2024
+     //
+     //     */
     public static void displayAllStudents(){
         try
         {
@@ -120,6 +135,14 @@ public class App
         }
     }
 
+    /**
+     //
+     //     * Author: Harjappan Singh
+     //
+     //     * Date: 5-April 2024
+     //
+     //     */
+
     public static void displayAllCourses(){
         try
         {
@@ -142,6 +165,13 @@ public class App
         }
     }
 
+    /**
+     //
+     //     * Author: Harjappan Singh
+     //
+     //     * Date: 5-April 2024
+     //
+     //     */
     public static void displayAllDepartments(){
         try
         {
@@ -164,6 +194,13 @@ public class App
         }
     }
 
+    /**
+     //
+     //     * Author: Harjappan Singh
+     //
+     //     * Date: 5-April 2024
+     //
+     //     */
     public static void displayAllModules(){
         try
         {
@@ -185,28 +222,162 @@ public class App
             e.printStackTrace();
         }
     }
-//    public static void displayByIDOption(){
-//        try
-//        {
-//            int id;
-//            System.out.println("Please enter the student id: ");
-//            Scanner kbr = new Scanner(System.in);
-//            id = kbr.nextInt();
-//            Student student = IStudentDao.findStudentById(id);
-//
-//            if( student != null ) {
-//
-//                String studentJSON = JSONConverter.studentToJson(student);
-//                System.out.println("Student found: " + student);
-//            }
-//            else
-//                System.out.println("Student with that student ID not found");
-//        }
-//        catch( DaoException e )
-//        {
-//            e.printStackTrace();
-//        }
-//    }
+
+    /**
+     //
+     //     * Author: Harjappan Singh
+     //
+     //     * Date: 5-April 2024
+     //
+     //     */
+    public static void displayByIDOption(){
+        int userInput = 0;
+
+        do {
+            System.out.println("1. Display specific student by an id");
+            System.out.println("2. Display specific course by an id");
+            System.out.println("3. Display specific department by an id");
+            System.out.println("4. Display specific module by an id");
+            System.out.println("5. Back");
+
+            Scanner sc = new Scanner(System.in);
+            userInput = sc.nextInt();
+
+            switch (userInput) {
+                case 1:
+                    displayStudentByID();
+                    break;
+                case 2:
+                    displayCourseByID();
+                    break;
+                case 3:
+                    displayDepartmentByID();
+                    break;
+                case 4:
+                    displayModuleByID();
+                    break;
+                case 5:
+                    break;
+                default:
+                    System.out.println("Enter a valid option");
+            }
+
+        } while (userInput !=5);
+    }
+
+    /**
+     //
+     //     * Author: Harjappan Singh
+     //
+     //     * Date: 5-April 2024
+     //
+     //     */
+    public static void displayStudentByID(){
+        try
+        {
+            int id;
+            System.out.println("Please enter the student id: ");
+            Scanner kbr = new Scanner(System.in);
+            id = kbr.nextInt();
+            Student student = IStudentDao.findStudentById(id);
+
+            if( student != null ) {
+
+                String studentJSON = JSONConverter.studentToJson(student);
+                System.out.println("Student found: " + student);
+            }
+            else
+                System.out.println("Student with that student ID not found");
+        }
+        catch( DaoException e )
+        {
+            e.printStackTrace();
+        }
+    }
+    /**
+     //
+     //     * Author: Harjappan Singh
+     //
+     //     * Date: 5-April 2024
+     //
+     //     */
+    public static void displayCourseByID(){
+        try
+        {
+            int id;
+            System.out.println("Please enter the course id: ");
+            Scanner kbr = new Scanner(System.in);
+            id = kbr.nextInt();
+            Course cs = ICourseDao.findCourseById(id);
+
+            if( cs != null ) {
+
+                System.out.println("Course found: " + cs);
+            }
+            else
+                System.out.println("Course with that Course ID not found");
+        }
+        catch( DaoException e )
+        {
+            e.printStackTrace();
+        }
+    }
+    /**
+     //
+     //     * Author: Harjappan Singh
+     //
+     //     * Date: 5-April 2024
+     //
+     //     */
+    public static void displayDepartmentByID(){
+        try
+        {
+            int id;
+            System.out.println("Please enter the department id: ");
+            Scanner kbr = new Scanner(System.in);
+            id = kbr.nextInt();
+            Department dp = IDepartmentDao.findDepartmentById(id);
+
+            if( dp != null ) {
+
+                System.out.println("Department found: " + dp);
+            }
+            else
+                System.out.println("Department with that department ID not found");
+        }
+        catch( DaoException e )
+        {
+            e.printStackTrace();
+        }
+    }
+    /**
+     //
+     //     * Author: Harjappan Singh
+     //
+     //     * Date: 5-April 2024
+     //
+     //     */
+    public static void displayModuleByID(){
+        try
+        {
+            int id;
+            System.out.println("Please enter the module id: ");
+            Scanner kbr = new Scanner(System.in);
+            id = kbr.nextInt();
+            Module md = IModuleDao.findModuleById(id);
+
+            if( md != null ) {
+
+                System.out.println("Module found: " + md);
+            }
+            else
+                System.out.println("Module with that module ID not found");
+        }
+        catch( DaoException e )
+        {
+            e.printStackTrace();
+        }
+    }
 //    public static void deleteByIdOption()
 //    {
 //        try

@@ -9,5 +9,8 @@ import java.util.List;
 public interface CourseDAOInterface
 {
     public List<Course> findAllCourses() throws DaoException;
+
+    public Course findCourseById(int id) throws DaoException;
+
 }
 

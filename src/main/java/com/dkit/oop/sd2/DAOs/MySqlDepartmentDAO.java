@@ -1,6 +1,7 @@
 package com.dkit.oop.sd2.DAOs;
 
 import com.dkit.oop.sd2.DTOs.Department;
+import com.dkit.oop.sd2.DTOs.Module;
 import com.dkit.oop.sd2.Exceptions.DaoException;
 
 import java.sql.*;
@@ -59,4 +60,52 @@ public class MySqlDepartmentDAO extends MySqlDao implements DepartmentDAOInterfa
         return departmentList;
     }
 
+    @Override
+    public Department findDepartmentById(int id) throws DaoException
+    {
+        Connection connection = null;
+        PreparedStatement preparedStatement = null;
+        ResultSet resultSet = null;
+        Department dp = null;
+        try
+        {
+            connection = this.getConnection();
+
+            String query = "SELECT * FROM Departments WHERE department_id = ?";
+            preparedStatement = connection.prepareStatement(query);
+            preparedStatement.setInt(1, id);
+
+            resultSet = preparedStatement.executeQuery();
+            if (resultSet.next())
+            {
+                String departmentName = resultSet.getString("department_name");
+
+                dp = new Department(id, departmentName);
+            }
+        } catch (SQLException e)
+        {
+            throw new DaoException("findDepartmentByIdResultSet() " + e.getMessage());
+        }
+        {
+            try
+            {
+                if (resultSet != null)
+                {
+                    resultSet.close();
+                }
+                if (preparedStatement != null)
+                {
+                    preparedStatement.close();
+                }
+                if (connection != null)
+                {
+                    freeConnection(connection);
+                }
+            } catch (SQLException e)
+            {
+                throw new DaoException("findDepartmentById() " + e.getMessage());
+            }
+        }
+        return dp;
+    }
 }

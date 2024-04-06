@@ -84,65 +84,64 @@ public class MySqlStudentDao extends MySqlDao implements StudentDaoInterface{
 //     * Date: 6-Mar 2024
 //
 //     */
-//    @Override
-//    public Student findStudentById(int id) throws DaoException
-//    {
-//        Connection connection = null;
-//        PreparedStatement preparedStatement = null;
-//        ResultSet resultSet = null;
-//        Student student = null;
-//        try
-//        {
-//            connection = this.getConnection();
-//
-//            String query = "SELECT * FROM STUDENTS WHERE id = ?";
-//            preparedStatement = connection.prepareStatement(query);
-//            preparedStatement.setInt(1, id);
-//
-//            resultSet = preparedStatement.executeQuery();
-//            if (resultSet.next())
-//            {
-//                String firstName = resultSet.getString("first_name");
-//                String lastName = resultSet.getString("last_name");
-//                Date birthDate = resultSet.getDate("birth_date");
-//                String studentEmail = resultSet.getString("student_email");
-//                String studentPhone = resultSet.getString("student_phone");
-//                String address = resultSet.getString("address");
-//                String courseFullName = resultSet.getString("course_full_name");
-//                String courseStatus = resultSet.getString("course_status");
-//                boolean hasPaidFullFee = resultSet.getBoolean("has_paid_full_fee");
-//                String classGroup = resultSet.getString("class_group");
-//                int graduationYear = resultSet.getInt("graduation_year");
-//                double currentGPA = resultSet.getInt("current_gpa");
-//
-//                student = new Student(id, firstName,lastName, birthDate, studentEmail, studentPhone, address,courseFullName, courseStatus, hasPaidFullFee,classGroup, graduationYear, currentGPA);
-//            }
-//        } catch (SQLException e)
-//        {
-//            throw new DaoException("findStudentByIdResultSet() " + e.getMessage());
-//        }
-//        {
-//            try
-//            {
-//                if (resultSet != null)
-//                {
-//                    resultSet.close();
-//                }
-//                if (preparedStatement != null)
-//                {
-//                    preparedStatement.close();
-//                }
-//                if (connection != null)
-//                {
-//                    freeConnection(connection);
-//                }
-//            } catch (SQLException e)
-//            {
-//                throw new DaoException("findStudentById() " + e.getMessage());
-//            }
-//        }
-//        return student;
-//    }
+    @Override
+    public Student findStudentById(int id) throws DaoException
+    {
+        Connection connection = null;
+        PreparedStatement preparedStatement = null;
+        ResultSet resultSet = null;
+        Student s = null;
+        try
+        {
+            connection = this.getConnection();
+
+            String query = "SELECT * FROM STUDENTS WHERE id = ?";
+            preparedStatement = connection.prepareStatement(query);
+            preparedStatement.setInt(1, id);
+
+            resultSet = preparedStatement.executeQuery();
+            if (resultSet.next())
+            {
+                String firstName = resultSet.getString("first_name");
+                String lastName = resultSet.getString("last_name");
+                Date birthDate = resultSet.getDate("birth_date");
+//                Date birthDate = Date.parse(resultSet.getString("birth_date"));
+                String studentEmail = resultSet.getString("student_email");
+                String studentPhone = resultSet.getString("student_phone");
+                String address = resultSet.getString("address");
+                int graduationYear = resultSet.getInt("graduation_year");
+                boolean hasPaidFullFee = resultSet.getBoolean("has_paid_full_fee");
+                double currentGPA = resultSet.getInt("current_gpa");
+                int courseId = resultSet.getInt("course_id");
+
+                 s = new Student(id, firstName,lastName, birthDate, studentEmail, studentPhone, address, graduationYear,hasPaidFullFee, currentGPA, courseId);
+            }
+        } catch (SQLException e)
+        {
+            throw new DaoException("findStudentByIdResultSet() " + e.getMessage());
+        }
+        {
+            try
+            {
+                if (resultSet != null)
+                {
+                    resultSet.close();
+                }
+                if (preparedStatement != null)
+                {
+                    preparedStatement.close();
+                }
+                if (connection != null)
+                {
+                    freeConnection(connection);
+                }
+            } catch (SQLException e)
+            {
+                throw new DaoException("findStudentById() " + e.getMessage());
+            }
+        }
+        return s;
+    }
 //
 //    /**
 //

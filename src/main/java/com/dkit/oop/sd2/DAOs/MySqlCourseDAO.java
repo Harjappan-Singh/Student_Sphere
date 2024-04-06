@@ -1,6 +1,7 @@
 package com.dkit.oop.sd2.DAOs;
 
 import com.dkit.oop.sd2.DTOs.Course;
+import com.dkit.oop.sd2.DTOs.Department;
 import com.dkit.oop.sd2.Exceptions.DaoException;
 
 import java.sql.Connection;
@@ -67,4 +68,56 @@ public class MySqlCourseDAO extends MySqlDao implements CourseDAOInterface {
         return courseList;
     }
 
+    @Override
+    public Course findCourseById(int id) throws DaoException
+    {
+        Connection connection = null;
+        PreparedStatement preparedStatement = null;
+        ResultSet resultSet = null;
+        Course cs = null;
+        try
+        {
+            connection = this.getConnection();
+
+            String query = "SELECT * FROM Courses WHERE course_id = ?";
+            preparedStatement = connection.prepareStatement(query);
+            preparedStatement.setInt(1, id);
+
+            resultSet = preparedStatement.executeQuery();
+            if (resultSet.next())
+            {
+                String courseName = resultSet.getString("course_name");
+                String courseCode = resultSet.getString("course_code");
+                int departmentID = resultSet.getInt("department_id");
+                int credits = resultSet.getInt("credits");
+                String level = resultSet.getString("level");
+
+                cs = new Course(id, courseName, courseCode, departmentID, credits, level);
+            }
+        } catch (SQLException e)
+        {
+            throw new DaoException("findCourseByIdResultSet() " + e.getMessage());
+        }
+        {
+            try
+            {
+                if (resultSet != null)
+                {
+                    resultSet.close();
+                }
+                if (preparedStatement != null)
+                {
+                    preparedStatement.close();
+                }
+                if (connection != null)
+                {
+                    freeConnection(connection);
+                }
+            } catch (SQLException e)
+            {
+                throw new DaoException("findCourseById() " + e.getMessage());
+            }
+        }
+        return cs;
+    }
 }
