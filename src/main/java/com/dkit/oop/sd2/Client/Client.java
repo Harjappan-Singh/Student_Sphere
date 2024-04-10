@@ -65,11 +65,15 @@ public class Client {
                         String userString = in.readLine();
                         System.out.println("Client message: Response from server after \"Display By ID Module- \" request: " + userString);
                     }
+                }else if (userRequest.startsWith("quit")) // if the user has entered the "quit" command
+                {
+                    String response = in.readLine();   // wait for response -
+                    System.out.println("Client message: Response from server: \"" + response + "\"");
+                    break;  // break out of while loop, client will exit.
                 }
                 else {
                     System.out.println("Command unknown. Try again.");
                 }
-
                 userRequest = displayMenu();
             }
         } catch (IOException e) {
@@ -126,6 +130,7 @@ public class Client {
                     break;
                 case 7:
                     query = "quit";
+                    break;
                 default:
                     System.out.println("Enter a valid option");
             }
