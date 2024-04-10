@@ -1,4 +1,4 @@
-package com.dkit.oop.sd2.DTOs;
+package com.dkit.oop.sd2.Server.DTOs;
 
 public class Module {
     private int moduleID;

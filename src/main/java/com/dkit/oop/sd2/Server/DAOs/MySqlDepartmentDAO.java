@@ -1,44 +1,40 @@
-package com.dkit.oop.sd2.DAOs;
+package com.dkit.oop.sd2.Server.DAOs;
 
-import com.dkit.oop.sd2.DTOs.Department;
-import com.dkit.oop.sd2.DTOs.Module;
-import com.dkit.oop.sd2.DTOs.Student;
-import com.dkit.oop.sd2.Exceptions.DaoException;
+import com.dkit.oop.sd2.Server.DTOs.Department;
+import com.dkit.oop.sd2.Server.Exceptions.DaoException;
 
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 
-public class MySqlModuleDAO extends MySqlDao implements ModuleDAOInterface {
+public class MySqlDepartmentDAO extends MySqlDao implements DepartmentDAOInterface {
     @Override
-    public List<Module> findAllModules() throws DaoException
+    public List<Department> findAllDepartments() throws DaoException
     {
         Connection connection = null;
         PreparedStatement preparedStatement = null;
         ResultSet resultSet = null;
-        List<Module> moduleList = new ArrayList<>();
+        List<Department> departmentList = new ArrayList<>();
 
         try
         {
             connection = this.getConnection();
 
-            String query = "SELECT * FROM Modules";
+            String query = "SELECT * FROM Departments";
             preparedStatement = connection.prepareStatement(query);
 
             resultSet = preparedStatement.executeQuery();
             while (resultSet.next())
             {
+                int departmentID = resultSet.getInt("department_id");
+                String departmentName = resultSet.getString("department_name");
 
-                int moduleID = resultSet.getInt("module_id");
-                String moduleName = resultSet.getString("module_name");
-                int credits = resultSet.getInt("credits");
-
-                Module m = new Module(moduleID, moduleName, credits);
-                moduleList.add(m);
+                Department d = new Department(departmentID, departmentName);
+                departmentList.add(d);
             }
         } catch (SQLException e)
         {
-            throw new DaoException("findAllModulesResultSet() " + e.getMessage());
+            throw new DaoException("findAllDepartmentResultSet() " + e.getMessage());
         } finally
         {
             try
@@ -57,37 +53,37 @@ public class MySqlModuleDAO extends MySqlDao implements ModuleDAOInterface {
                 }
             } catch (SQLException e)
             {
-                throw new DaoException("findAllModules() " + e.getMessage());
+                throw new DaoException("findAllDepartment() " + e.getMessage());
             }
         }
-        return moduleList;
+        return departmentList;
     }
+
     @Override
-    public Module findModuleById(int id) throws DaoException
+    public Department findDepartmentById(int id) throws DaoException
     {
         Connection connection = null;
         PreparedStatement preparedStatement = null;
         ResultSet resultSet = null;
-        Module md = null;
+        Department dp = null;
         try
         {
             connection = this.getConnection();
 
-            String query = "SELECT * FROM Modules WHERE module_id = ?";
+            String query = "SELECT * FROM Departments WHERE department_id = ?";
             preparedStatement = connection.prepareStatement(query);
             preparedStatement.setInt(1, id);
 
             resultSet = preparedStatement.executeQuery();
             if (resultSet.next())
             {
-                String moduleName = resultSet.getString("module_name");
-                int credits = resultSet.getInt("credits");
+                String departmentName = resultSet.getString("department_name");
 
-                md = new Module(id, moduleName, credits);
+                dp = new Department(id, departmentName);
             }
         } catch (SQLException e)
         {
-            throw new DaoException("findModuleByIdResultSet() " + e.getMessage());
+            throw new DaoException("findDepartmentByIdResultSet() " + e.getMessage());
         }
         {
             try
@@ -106,35 +102,10 @@ public class MySqlModuleDAO extends MySqlDao implements ModuleDAOInterface {
                 }
             } catch (SQLException e)
             {
-                throw new DaoException("findModuleById() " + e.getMessage());
+                throw new DaoException("findDepartmentById() " + e.getMessage());
             }
         }
-        return md;
-    }
-
-    /**
-     //
-     //     * Author: Meghana Rathnam
-     //
-     //     * Date: 9-April 2024
-     //
-     //     */
-    @Override
-    public void insertNewModule(Module module) throws DaoException {
-        try (Connection connection = this.getConnection()) {
-            String query = "INSERT INTO Modules (module_name, credits) VALUES (?, ?)";
-            try (PreparedStatement preparedStatement = connection.prepareStatement(query)) {
-                preparedStatement.setString(1, module.getModuleName());
-                preparedStatement.setInt(2, module.getCredits());
-
-                int affectedRows = preparedStatement.executeUpdate();
-                if (affectedRows == 0) {
-                    throw new DaoException("Creating module failed, no rows affected.");
-                }
-            }
-        } catch (SQLException e) {
-            throw new DaoException("insertNewModule() " + e.getMessage());
-        }
+        return dp;
     }
     /**
      //
@@ -143,22 +114,45 @@ public class MySqlModuleDAO extends MySqlDao implements ModuleDAOInterface {
      //     * Date: 9-April 2024
      //
      //     */
+
     @Override
-    public void updateModuleById(Module module) throws DaoException {
+    public void insertNewDepartment(Department department) throws DaoException {
         try (Connection connection = this.getConnection()) {
-            String query = "UPDATE Modules SET module_name = ?, credits = ? WHERE module_id = ?";
+            String query = "INSERT INTO Departments (department_name) VALUES (?)";
             try (PreparedStatement preparedStatement = connection.prepareStatement(query)) {
-                preparedStatement.setString(1, module.getModuleName());
-                preparedStatement.setInt(2, module.getCredits());
-                preparedStatement.setInt(3, module.getModuleID());
+                preparedStatement.setString(1, department.getDepartmentName());
 
                 int affectedRows = preparedStatement.executeUpdate();
                 if (affectedRows == 0) {
-                    throw new DaoException("Updating module failed, no rows affected.");
+                    throw new DaoException("Creating department failed, no rows affected.");
                 }
             }
         } catch (SQLException e) {
-            throw new DaoException("updateModuleById() " + e.getMessage());
+            throw new DaoException("insertNewDepartment() " + e.getMessage());
+        }
+    }
+    /**
+     //
+     //     * Author: Meghana Rathnam
+     //
+     //     * Date: 9-April 2024
+     //
+     //     */
+    @Override
+    public void updateDepartmentById(Department department) throws DaoException {
+        try (Connection connection = this.getConnection()) {
+            String query = "UPDATE Departments SET department_name = ? WHERE department_id = ?";
+            try (PreparedStatement preparedStatement = connection.prepareStatement(query)) {
+                preparedStatement.setString(1, department.getDepartmentName());
+                preparedStatement.setInt(2, department.getDepartmentID());
+
+                int affectedRows = preparedStatement.executeUpdate();
+                if (affectedRows == 0) {
+                    throw new DaoException("Updating department failed, no rows affected.");
+                }
+            }
+        } catch (SQLException e) {
+            throw new DaoException("updateDepartmentById() " + e.getMessage());
         }
     }
 }

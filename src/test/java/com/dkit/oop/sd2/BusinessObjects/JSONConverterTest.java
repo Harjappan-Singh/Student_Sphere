@@ -1,6 +1,6 @@
 package com.dkit.oop.sd2.BusinessObjects;
 
-import com.dkit.oop.sd2.DTOs.Student;
+import com.dkit.oop.sd2.Server.DTOs.Student;
 import static org.junit.Assert.*;
 import org.junit.Test;
 

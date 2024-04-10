@@ -1,10 +1,10 @@
 package com.dkit.oop.sd2.BusinessObjects;
-import com.dkit.oop.sd2.DAOs.*;
-import com.dkit.oop.sd2.DTOs.Course;
-import com.dkit.oop.sd2.DTOs.Department;
-import com.dkit.oop.sd2.DTOs.Module;
-import com.dkit.oop.sd2.DTOs.Student;
-import com.dkit.oop.sd2.Exceptions.DaoException;
+import com.dkit.oop.sd2.Server.DAOs.*;
+import com.dkit.oop.sd2.Server.DTOs.Course;
+import com.dkit.oop.sd2.Server.DTOs.Department;
+import com.dkit.oop.sd2.Server.DTOs.Module;
+import com.dkit.oop.sd2.Server.DTOs.Student;
+import com.dkit.oop.sd2.Server.Exceptions.DaoException;
 
 import java.util.List;
 import java.util.Scanner;
