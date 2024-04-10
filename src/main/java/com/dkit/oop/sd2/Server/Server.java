@@ -136,7 +136,8 @@ class ClientHandler implements Runnable
                             Course cs = ICourseDao.findCourseById(id);
 
                             if( cs != null ) {
-                                socketWriter.println(cs);
+                                String courseJSON = JSONConverter.courseToJson(cs);
+                                socketWriter.println(courseJSON);
                             }
                             else{
                                 socketWriter.println("Course with that course ID not found");
@@ -156,7 +157,8 @@ class ClientHandler implements Runnable
                             Department dt = IDepartmentDao.findDepartmentById(id);
 
                             if( dt != null ) {
-                                socketWriter.println(dt);
+                                String departmentJSON = JSONConverter.departmentToJson(dt);
+                                socketWriter.println(departmentJSON);
                             }
                             else{
                                 socketWriter.println("Department with that department ID not found");
@@ -176,7 +178,8 @@ class ClientHandler implements Runnable
                             Module md = IModuleDao.findModuleById(id);
 
                             if( md != null ) {
-                                socketWriter.println(md);
+                                String moduleJSON = JSONConverter.moduleToJson(md);
+                                socketWriter.println(moduleJSON);
                             }
                             else{
                                 socketWriter.println("Module with that module ID not found");
@@ -188,11 +191,6 @@ class ClientHandler implements Runnable
                         }
                         System.out.println("Server message: Module sent to client.");
                     }
-                }
-                else if (request.startsWith("echo")) {
-                    String message = request.substring(5); // strip off the leading substring "echo "
-                    socketWriter.println(message);   // send the received message back to the client
-                    System.out.println("Server message: echo message sent to client.");
                 } else if (request.startsWith("quit"))
                 {
                     socketWriter.println("Sorry to see you leaving. Goodbye.");

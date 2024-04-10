@@ -57,13 +57,22 @@ public class Client {
                         System.out.println(student);
                     } else if (userRequest.startsWith("Display By ID Course")) {
                         String userString = in.readLine();
-                        System.out.println("Client message: Response from server after \"Display By ID Course- \" request: " + userString);
+                        System.out.println("----Client message: Response from server after \"Display By ID Course- \" request----");
+                        Gson gsonParser = new Gson();
+                        Course cs = gsonParser.fromJson(userString, Course.class);
+                        System.out.println(cs);
                     } else if (userRequest.startsWith("Display By ID Department")) {
                         String userString = in.readLine();
-                        System.out.println("Client message: Response from server after \"Display By ID Department- \" request: " + userString);
+                        System.out.println("----Client message: Response from server after \"Display By ID Department- \" request----");
+                        Gson gsonParser = new Gson();
+                        Department dt = gsonParser.fromJson(userString, Department.class);
+                        System.out.println(dt);
                     } else if (userRequest.startsWith("Display By ID Module")) {
                         String userString = in.readLine();
-                        System.out.println("Client message: Response from server after \"Display By ID Module- \" request: " + userString);
+                        System.out.println("----Client message: Response from server after \"Display By ID Module- \" request----");
+                        Gson gsonParser = new Gson();
+                        Module md = gsonParser.fromJson(userString, Module.class);
+                        System.out.println(md);
                     }
                 }else if (userRequest.startsWith("quit")) // if the user has entered the "quit" command
                 {
@@ -96,12 +105,12 @@ public class Client {
         String query ="";
 
         do {
-            System.out.println("1. Display options");
+//            System.out.println("1. Display options");
             System.out.println("2. Display by unique id options");
-            System.out.println("3. Delete student by an id");
-            System.out.println("4. Insert Options");
-            System.out.println("5. Update Options");
-            System.out.println("6. Filter students by their age");
+//            System.out.println("3. Delete student by an id");
+//            System.out.println("4. Insert Options");
+//            System.out.println("5. Update Options");
+//            System.out.println("6. Filter students by their age");
             System.out.println("7. Exit");
             System.out.print("Choose an option: ");
 
