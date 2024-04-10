@@ -12,6 +12,9 @@ public class Department {
         this.departmentName = departmentName;
     }
 
+    public Department(String departmentName) {
+        this.departmentName = departmentName;
+    }
     public int getDepartmentID() {
         return departmentID;
     }
@@ -20,11 +23,11 @@ public class Department {
         this.departmentID = departmentID;
     }
 
-    public String getGetDepartmentName() {
+    public String getDepartmentName() {
         return departmentName;
     }
 
-    public void setGetDepartmentName(String getDepartmentName) {
+    public void setDepartmentName(String getDepartmentName) {
         this.departmentName = getDepartmentName;
     }
 

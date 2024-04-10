@@ -12,5 +12,8 @@ public interface CourseDAOInterface
 
     public Course findCourseById(int id) throws DaoException;
 
+    void insertNewCourse(Course course) throws DaoException;
+    void updateCourseById(Course course) throws DaoException;
+
 }
 

@@ -108,4 +108,52 @@ public class MySqlDepartmentDAO extends MySqlDao implements DepartmentDAOInterfa
         }
         return dp;
     }
+    /**
+     //
+     //     * Author: Meghana Rathnam
+     //
+     //     * Date: 9-April 2024
+     //
+     //     */
+
+    @Override
+    public void insertNewDepartment(Department department) throws DaoException {
+        try (Connection connection = this.getConnection()) {
+            String query = "INSERT INTO Departments (department_name) VALUES (?)";
+            try (PreparedStatement preparedStatement = connection.prepareStatement(query)) {
+                preparedStatement.setString(1, department.getDepartmentName());
+
+                int affectedRows = preparedStatement.executeUpdate();
+                if (affectedRows == 0) {
+                    throw new DaoException("Creating department failed, no rows affected.");
+                }
+            }
+        } catch (SQLException e) {
+            throw new DaoException("insertNewDepartment() " + e.getMessage());
+        }
+    }
+    /**
+     //
+     //     * Author: Meghana Rathnam
+     //
+     //     * Date: 9-April 2024
+     //
+     //     */
+    @Override
+    public void updateDepartmentById(Department department) throws DaoException {
+        try (Connection connection = this.getConnection()) {
+            String query = "UPDATE Departments SET department_name = ? WHERE department_id = ?";
+            try (PreparedStatement preparedStatement = connection.prepareStatement(query)) {
+                preparedStatement.setString(1, department.getDepartmentName());
+                preparedStatement.setInt(2, department.getDepartmentID());
+
+                int affectedRows = preparedStatement.executeUpdate();
+                if (affectedRows == 0) {
+                    throw new DaoException("Updating department failed, no rows affected.");
+                }
+            }
+        } catch (SQLException e) {
+            throw new DaoException("updateDepartmentById() " + e.getMessage());
+        }
+    }
 }

@@ -188,112 +188,105 @@ public class MySqlStudentDao extends MySqlDao implements StudentDaoInterface{
 //        }
 //
 //
-//    /**
-//
-//     * Author: Meghana Rathnam
-//
-//     * Date: 7-Mar 2024
-//
-//     */
-//    @Override
-//    public void insertNewStudent(Student student) throws DaoException {
-//        Connection connection = null;
-//        PreparedStatement preparedStatement = null;
-//        try {
-//            connection = this.getConnection();
-//
-//
-//            String query = "INSERT INTO STUDENTS(id,first_name, last_name, birth_date, student_email, student_phone, address, course_full_name, course_status, has_paid_full_fee, class_group, graduation_year, current_gpa) " +
-//                    "VALUES (null,?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
-//
-//            preparedStatement = connection.prepareStatement(query);
-//
-//
-//            preparedStatement.setString(1, student.getFirstName());
-//            preparedStatement.setString(2, student.getLastName());
-//            preparedStatement.setDate(3, student.getBirthDate());
-//            preparedStatement.setString(4, student.getStudentEmail());
-//            preparedStatement.setString(5, student.getStudentPhone());
-//            preparedStatement.setString(6, student.getAddress());
-//            preparedStatement.setString(7, student.getCourseFullName());
-//            preparedStatement.setString(8, student.getCourseStatus());
-//            preparedStatement.setBoolean(9, student.isHasPaidFullFee());
-//            preparedStatement.setString(10, student.getClassGroup());
-//            preparedStatement.setInt(11, student.getGraduationYear());
-//            preparedStatement.setDouble(12, student.getCurrentGPA());
-//
-//
-//            int rowCount = preparedStatement.executeUpdate();
-//            System.out.println(rowCount + " row(s) affected");
-//        } catch (SQLException e) {
-//            throw new DaoException("insertNewStudent() " + e.getMessage());
-//        } finally {
-//            try {
-//                if (preparedStatement != null) {
-//                    preparedStatement.close();
-//                }
-//                if (connection != null) {
-//                    freeConnection(connection);
-//                }
-//            } catch (SQLException e) {
-//                throw new DaoException("insertNewStudent() " + e.getMessage());
-//            }
-//        }
-//    }
-//
-//    /**
-//     * Author: Meghana Rathnam
-//     * Date: 15-Mar 2024
-//     */
-//    @Override
-//    public void updateStudentById(int id, Student student) throws DaoException {
-//        Connection connection = null;
-//        PreparedStatement preparedStatement = null;
-//
-//        try {
-//            connection = this.getConnection();
-//
-//            String query = "UPDATE STUDENTS SET first_name = ?, last_name = ?, birth_date = ?, student_email = ?, student_phone = ?, " +
-//                    "address = ?, course_full_name = ?, course_status = ?, has_paid_full_fee = ?, class_group = ?, graduation_year = ?, current_gpa = ? " +
-//                    "WHERE id = ?";
-//
-//            preparedStatement = connection.prepareStatement(query);
-//
-//            preparedStatement.setString(1, student.getFirstName());
-//            preparedStatement.setString(2, student.getLastName());
-//            preparedStatement.setDate(3, student.getBirthDate());
-//            preparedStatement.setString(4, student.getStudentEmail());
-//            preparedStatement.setString(5, student.getStudentPhone());
-//            preparedStatement.setString(6, student.getAddress());
-//            preparedStatement.setString(7, student.getCourseFullName());
-//            preparedStatement.setString(8, student.getCourseStatus());
-//            preparedStatement.setBoolean(9, student.isHasPaidFullFee());
-//            preparedStatement.setString(10, student.getClassGroup());
-//            preparedStatement.setInt(11, student.getGraduationYear());
-//            preparedStatement.setDouble(12, student.getCurrentGPA());
-//            preparedStatement.setInt(13,id);
-//
-//            int affectedRows = preparedStatement.executeUpdate();
-//
-//            if (affectedRows == 0) {
-//                throw new DaoException("Updating student failed, no rows affected.");
-//            }
-//        } catch (SQLException e) {
-//            throw new DaoException("updateStudent() " + e.getMessage());
-//        } finally {
-//            try {
-//                if (preparedStatement != null) {
-//                    preparedStatement.close();
-//                }
-//                if (connection != null) {
-//                    freeConnection(connection);
-//                }
-//            } catch (SQLException e) {
-//                throw new DaoException("updateStudent() finally " + e.getMessage());
-//            }
-//        }
-//    }
-//
+    /**
+     * Author: Meghana Rathnam
+     * Date: 7-Mar 2024
+     */
+    @Override
+    public void insertNewStudent(Student student) throws DaoException {
+        Connection connection = null;
+        PreparedStatement preparedStatement = null;
+        try {
+            connection = this.getConnection();
+
+
+            String query = "INSERT INTO STUDENTS(id,first_name, last_name, birth_date, student_email, student_phone, address,  graduation_year,has_paid_full_fee, current_gpa,course_id) " +
+                    "VALUES (null,?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+
+            preparedStatement = connection.prepareStatement(query);
+
+
+            preparedStatement.setString(1, student.getFirstName());
+            preparedStatement.setString(2, student.getLastName());
+            preparedStatement.setDate(3, student.getBirthDate());
+            preparedStatement.setString(4, student.getStudentEmail());
+            preparedStatement.setString(5, student.getStudentPhone());
+            preparedStatement.setString(6, student.getAddress());
+            preparedStatement.setInt(7, student.getGraduationYear());
+            preparedStatement.setBoolean(8, student.isHasPaidFullFee());
+            preparedStatement.setDouble(9, student.getCurrentGPA());
+            preparedStatement.setInt(10, student.getCourseId());
+
+
+            int rowCount = preparedStatement.executeUpdate();
+            System.out.println(rowCount + " row(s) affected");
+        } catch (SQLException e) {
+            throw new DaoException("insertNewStudent() " + e.getMessage());
+        } finally {
+            try {
+                if (preparedStatement != null) {
+                    preparedStatement.close();
+                }
+                if (connection != null) {
+                    freeConnection(connection);
+                }
+            } catch (SQLException e) {
+                throw new DaoException("insertNewStudent() " + e.getMessage());
+            }
+        }
+    }
+
+    /**
+     * Author: Meghana Rathnam
+     * Date: 15-Mar 2024
+     */
+    @Override
+    public void updateStudentById(int id, Student student) throws DaoException {
+        Connection connection = null;
+        PreparedStatement preparedStatement = null;
+
+        try {
+            connection = this.getConnection();
+
+            String query = "UPDATE STUDENTS SET first_name = ?, last_name = ?, birth_date = ?, student_email = ?, student_phone = ?, " +
+                    "address = ?, graduation_year = ?,  has_paid_full_fee = ?,   current_gpa = ? , course_id = ? " +
+                    "WHERE id = ?";
+
+
+            preparedStatement = connection.prepareStatement(query);
+
+            preparedStatement.setString(1, student.getFirstName());
+            preparedStatement.setString(2, student.getLastName());
+            preparedStatement.setDate(3, student.getBirthDate());
+            preparedStatement.setString(4, student.getStudentEmail());
+            preparedStatement.setString(5, student.getStudentPhone());
+            preparedStatement.setString(6, student.getAddress());
+            preparedStatement.setInt(7, student.getGraduationYear());
+            preparedStatement.setBoolean(8, student.isHasPaidFullFee());
+            preparedStatement.setDouble(9, student.getCurrentGPA());
+            preparedStatement.setInt(10, student.getCourseId());
+            preparedStatement.setInt(11, student.getId());
+
+            int affectedRows = preparedStatement.executeUpdate();
+
+            if (affectedRows == 0) {
+                throw new DaoException("Updating student failed, no rows affected.");
+            }
+        } catch (SQLException e) {
+            throw new DaoException("updateStudent() " + e.getMessage());
+        } finally {
+            try {
+                if (preparedStatement != null) {
+                    preparedStatement.close();
+                }
+                if (connection != null) {
+                    freeConnection(connection);
+                }
+            } catch (SQLException e) {
+                throw new DaoException("updateStudent() finally " + e.getMessage());
+            }
+        }
+    }
 //    /**
 //     * Author: Conor Gilbert
 //     * Date: 15-Mar 2024

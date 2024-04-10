@@ -13,5 +13,8 @@ public interface ModuleDAOInterface
 
     public Module findModuleById(int id) throws DaoException;
 
+    void insertNewModule(Module module) throws DaoException;
+    void updateModuleById(Module module) throws DaoException;
+
 }
 

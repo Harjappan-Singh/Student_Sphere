@@ -11,6 +11,14 @@ public class Course {
     public Course() {
     }
 
+    public Course(String courseName, String courseCode, int departmentID, int credits, String level) {
+        this.courseName = courseName;
+        this.courseCode = courseCode;
+        this.departmentID = departmentID;
+        this.credits = credits;
+        this.level = level;
+    }
+
     public Course(int courseID, String courseName, String courseCode, int departmentID, int credits, String level) {
         this.courseID = courseID;
         this.courseName = courseName;

@@ -14,6 +14,10 @@ public class Module {
         this.credits = credits;
     }
 
+    public Module(String moduleName, int credits) {
+        this.moduleName = moduleName;
+        this.credits = credits;
+    }
     public int getModuleID() {
         return moduleID;
     }

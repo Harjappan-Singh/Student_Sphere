@@ -8,6 +8,7 @@ import com.dkit.oop.sd2.Exceptions.DaoException;
 
 import java.util.List;
 import java.util.Scanner;
+import java.sql.Date;
 
 public class App
 {
@@ -26,8 +27,8 @@ public class App
             System.out.println("1. Display options");
             System.out.println("2. Display by unique id options");
             System.out.println("3. Delete student by an id");
-            System.out.println("4. Add a new student");
-            System.out.println("5. Update an existing student by id");
+            System.out.println("4. Insert Options");
+            System.out.println("5. Update Options");
             System.out.println("6. Filter students by their age");
             System.out.println("7. Exit");
             System.out.print("Choose an option: ");
@@ -46,10 +47,10 @@ public class App
 //                    deleteByIdOption();
                     break;
                 case 4:
-//                    insertStudentOption();
+                    insertOptions();
                     break;
                 case 5:
-//                    updateStudentOption();
+                    updateOptions();
                     break;
                 case 6:
 //                    findStudentUsingFilterOption();
@@ -378,6 +379,497 @@ public class App
             e.printStackTrace();
         }
     }
+
+    /**
+     //
+     //     * Author: Meghana Rathnam
+     //
+     //     * Date: 9-April 2024
+     //
+     //     */
+
+    public static void insertOptions(){
+        int userInput = 0;
+
+        do {
+            System.out.println("1. Insert a new Student");
+            System.out.println("2. Insert a new Course");
+            System.out.println("3. Insert a new Department");
+            System.out.println("4. Insert a new Module");
+            System.out.println("5. Back");
+
+            Scanner sc = new Scanner(System.in);
+            userInput = sc.nextInt();
+
+            switch (userInput) {
+                case 1:
+                    insertStudentOption();
+                    break;
+                case 2:
+                    insertNewCourseOption();
+                    break;
+                case 3:
+                    insertNewDepartmentOption();
+                    break;
+                case 4:
+                    insertNewModuleOption();
+                    break;
+                case 5:
+                    break;
+                default:
+                    System.out.println("Enter a valid option");
+            }
+
+        } while (userInput !=5);
+    }
+    /**
+     * Author: Meghana Rathnam
+     * Date: 15-Mar 2024
+     */
+    /**
+     //
+     //     * Author: Meghana Rathnam
+     //
+     //     * Update Date: 9-April 2024
+     //
+     //     */
+    public static void insertStudentOption(){
+        Scanner sc = new Scanner(System.in);
+
+        try {
+            System.out.println("Enter student details : ");
+
+            System.out.print("First Name: ");
+            String firstName = sc.next();
+
+            sc.nextLine();
+
+            System.out.print("Last Name: ");
+            String lastName = sc.next();
+
+            sc.nextLine();
+
+            System.out.print("Birth Date (YYYY-MM-DD): ");
+            Date birthDate = Date.valueOf(sc.nextLine());
+
+            System.out.print("Email: ");
+            String email = sc.next();
+
+            System.out.print("Phone: ");
+            String phone = sc.next();
+
+            sc.nextLine();
+
+            System.out.print("Address: ");
+            String address = sc.nextLine();
+
+
+            System.out.print("Graduation Year: ");
+            int graduationYear = sc.nextInt();
+
+            sc.nextLine();
+
+            System.out.print("Has Paid Full Fee (true/false): ");
+            boolean hasPaidFullFee = sc.nextBoolean();
+
+            System.out.print("Current GPA: ");
+            double currentGPA = sc.nextDouble();
+
+            System.out.print("Course ID: ");
+            int courseId = sc.nextInt();
+
+            Student newStudent = new Student(firstName, lastName, birthDate, email, phone, address,   graduationYear, hasPaidFullFee,currentGPA, courseId);
+
+            IStudentDao.insertNewStudent(newStudent);
+            System.out.println("New student added successfully!");
+        } catch (DaoException e) {
+            System.out.println("Error adding new student: " + e.getMessage());
+            e.printStackTrace();
+        }
+    }
+    /**
+     //
+     //     * Author: Meghana Rathnam
+     //
+     //     * Date: 9-April 2024
+     //
+     //     */
+    public static void insertNewCourseOption() {
+        Scanner sc = new Scanner(System.in);
+
+        try {
+            System.out.println("Enter new course details:");
+
+            System.out.print("Course Name: ");
+            String courseName = sc.nextLine();
+
+            System.out.print("Course Code: ");
+            String courseCode = sc.nextLine();
+
+            System.out.print("Department ID: ");
+            int departmentID = sc.nextInt();
+
+            System.out.print("Credits: ");
+            int credits = sc.nextInt();
+
+            sc.nextLine();
+
+            System.out.print("Level: ");
+            String level = sc.nextLine();
+
+            Course newCourse = new Course(courseName, courseCode, departmentID, credits, level);
+
+            ICourseDao.insertNewCourse(newCourse);
+            System.out.println("New course added successfully!");
+        } catch (DaoException e) {
+            System.out.println("Error adding new course: " + e.getMessage());
+        }
+    }
+    /**
+     //
+     //     * Author: Meghana Rathnam
+     //
+     //     * Date: 9-April 2024
+     //
+     //     */
+    public static void insertNewDepartmentOption() {
+        Scanner sc = new Scanner(System.in);
+        System.out.println("Enter new department name:");
+
+        String departmentName = sc.nextLine();
+
+        Department newDepartment = new Department(departmentName);
+        try {
+            IDepartmentDao.insertNewDepartment(newDepartment);
+            System.out.println("New department added successfully!");
+        } catch (DaoException e) {
+            System.out.println("Error adding new department: " + e.getMessage());
+        }
+    }
+    /**
+     //
+     //     * Author: Meghana Rathnam
+     //
+     //     * Date: 9-April 2024
+     //
+     //     */
+    public static void insertNewModuleOption() {
+        Scanner sc = new Scanner(System.in);
+
+        System.out.println("Enter new module details:");
+
+        System.out.print("Module Name: ");
+        String moduleName = sc.nextLine();
+
+        System.out.print("Credits: ");
+        int credits = sc.nextInt();
+
+        Module newModule = new Module(moduleName, credits);
+        try {
+            IModuleDao.insertNewModule(newModule);
+            System.out.println("New module added successfully!");
+        } catch (DaoException e) {
+            System.out.println("Error adding new module: " + e.getMessage());
+        }
+    }
+
+    /**
+     //
+     //     * Author: Meghana Rathnam
+     //
+     //     * Date: 9-April 2024
+     //
+     //     */
+    public static void updateOptions(){
+        int userInput = 0;
+
+        do {
+            System.out.println("1.Update a Student by Id");
+            System.out.println("2. Update a Course by Id");
+            System.out.println("3. Update a Department by Id");
+            System.out.println("4. Update a Module by Id");
+            System.out.println("5. Back");
+
+            Scanner sc = new Scanner(System.in);
+            userInput = sc.nextInt();
+
+            switch (userInput) {
+                case 1:
+                    updateStudentOption();
+                    break;
+                case 2:
+                    updateCourseOption();
+                    break;
+                case 3:
+                    updateDepartmentOption();
+                    break;
+                case 4:
+                    updateModuleOption();
+                    break;
+                case 5:
+                    break;
+                default:
+                    System.out.println("Enter a valid option");
+            }
+
+        } while (userInput !=5);
+    }
+
+    /**
+     * Author: Meghana Rathnam
+     * Date: 15-Mar 2024
+     */
+    /**
+     //
+     //     * Author: Meghana Rathnam
+     //
+     //     * Update Date: 9-April 2024
+     //
+     //     */
+    public static void updateStudentOption() {
+        Scanner sc = new Scanner(System.in);
+
+        try {
+            System.out.println("Enter the ID of the student you wish to update: ");
+            int id = sc.nextInt();
+            sc.nextLine();
+
+            Student studentToUpdate = IStudentDao.findStudentById(id);
+            if (studentToUpdate == null) {
+                System.out.println("Student with ID " + id + " not found.");
+                return;
+            }
+
+            System.out.println("Enter 'skip' for any field you do not wish to update.");
+
+            System.out.print("First Name [" + studentToUpdate.getFirstName() + "]: ");
+            String firstName = sc.nextLine();
+            if (!"skip".equalsIgnoreCase(firstName.trim())) {
+                studentToUpdate.setFirstName(firstName);
+            }
+
+            System.out.print("Last Name [" + studentToUpdate.getLastName() + "]: ");
+            String lastName = sc.nextLine();
+            if (!"skip".equalsIgnoreCase(lastName.trim())) {
+                studentToUpdate.setLastName(lastName);
+            }
+
+            System.out.print("Birth Date (YYYY-MM-DD) [" + studentToUpdate.getBirthDate() + "]: ");
+            String birthDateStr = sc.nextLine();
+            if (!"skip".equalsIgnoreCase(birthDateStr.trim())) {
+                try {
+                    Date birthDate = Date.valueOf(birthDateStr);
+                    studentToUpdate.setBirthDate(birthDate);
+                } catch (IllegalArgumentException e) {
+                    System.out.println("Invalid date format, field not updated.");
+                }
+            }
+
+            System.out.print("Email [" + studentToUpdate.getStudentEmail() + "]: ");
+            String email = sc.nextLine();
+            if (!"skip".equalsIgnoreCase(email.trim())) {
+                studentToUpdate.setStudentEmail(email);
+            }
+
+            System.out.print("Phone [" + studentToUpdate.getStudentPhone() + "]: ");
+            String phone = sc.nextLine();
+            if (!"skip".equalsIgnoreCase(phone.trim())) {
+                studentToUpdate.setStudentPhone(phone);
+            }
+
+            System.out.print("Address [" + studentToUpdate.getAddress() + "]: ");
+            String address = sc.nextLine();
+            if (!"skip".equalsIgnoreCase(address.trim())) {
+                studentToUpdate.setAddress(address);
+            }
+
+
+            System.out.print("Has Paid Full Fee (true/false) [" + studentToUpdate.isHasPaidFullFee() + "]: ");
+            String hasPaidFullFeeStr = sc.nextLine();
+            if (!"skip".equalsIgnoreCase(hasPaidFullFeeStr.trim())) {
+                boolean hasPaidFullFee = Boolean.parseBoolean(hasPaidFullFeeStr);
+                studentToUpdate.setHasPaidFullFee(hasPaidFullFee);
+            }
+
+
+            System.out.print("Graduation Year: ");
+            String graduationYearStr = sc.nextLine();
+            if (!"skip".equalsIgnoreCase(graduationYearStr.trim())) {
+                try {
+                    int graduationYear = Integer.parseInt(graduationYearStr);
+                    studentToUpdate.setGraduationYear(graduationYear);
+                } catch (NumberFormatException e) {
+                    System.out.println("Invalid number format, field not updated.");
+                }
+            }
+
+            System.out.print("Current GPA: ");
+            String currentGPAStr = sc.nextLine();
+            if (!"skip".equalsIgnoreCase(currentGPAStr.trim())) {
+                try {
+                    double currentGPA = Double.parseDouble(currentGPAStr);
+                    studentToUpdate.setCurrentGPA(currentGPA);
+                } catch (NumberFormatException e) {
+                    System.out.println("Invalid number format, field not updated.");
+                }
+            }
+
+            System.out.print("Course ID [" + studentToUpdate.getCourseId() + "]: ");
+            String courseIdStr = sc.nextLine();
+            if (!"skip".equalsIgnoreCase(courseIdStr.trim())) {
+                try {
+                    int courseId = Integer.parseInt(courseIdStr);
+                    studentToUpdate.setCourseId(courseId); // Assuming you have a setter for courseId in Student class
+                } catch (NumberFormatException e) {
+                    System.out.println("Invalid number format, field not updated.");
+                }
+            }
+
+            IStudentDao.updateStudentById(id, studentToUpdate);
+            System.out.println("Student updated successfully!");
+
+        } catch (DaoException e) {
+            System.out.println("Error updating student: " + e.getMessage());
+            e.printStackTrace();
+        }
+    }
+    /**
+     //
+     //     * Author: Meghana Rathnam
+     //
+     //     * Date: 9-April 2024
+     //
+     //     */
+    public static void updateCourseOption() {
+        Scanner sc = new Scanner(System.in);
+
+        try {
+            System.out.println("Enter the ID of the course you wish to update:");
+            int id = sc.nextInt();
+            sc.nextLine();
+
+            Course courseToUpdate = ICourseDao.findCourseById(id);
+            if (courseToUpdate == null) {
+                System.out.println("Course with ID " + id + " not found.");
+                return;
+            }
+
+            System.out.println("Enter 'skip' for any field you do not wish to update.");
+
+            System.out.print("Course Name [" + courseToUpdate.getCourseName() + "]: ");
+            String courseName = sc.nextLine();
+            if (!"skip".equalsIgnoreCase(courseName.trim())) {
+                courseToUpdate.setCourseName(courseName);
+            }
+
+            System.out.print("Course Code [" + courseToUpdate.getCourseCode() + "]: ");
+            String courseCode = sc.nextLine();
+            if (!"skip".equalsIgnoreCase(courseCode.trim())) {
+                courseToUpdate.setCourseCode(courseCode);
+            }
+
+            System.out.print("Department ID [" + courseToUpdate.getDepartmentID() + "]: ");
+            String departmentIDStr = sc.nextLine();
+            if (!"skip".equalsIgnoreCase(departmentIDStr.trim())) {
+                int departmentID = Integer.parseInt(departmentIDStr);
+                courseToUpdate.setDepartmentID(departmentID);
+            }
+
+            System.out.print("Credits [" + courseToUpdate.getCredits() + "]: ");
+            String creditsStr = sc.nextLine();
+            if (!"skip".equalsIgnoreCase(creditsStr.trim())) {
+                int credits = Integer.parseInt(creditsStr);
+                courseToUpdate.setCredits(credits);
+            }
+
+            System.out.print("Level [" + courseToUpdate.getLevel() + "]: ");
+            String level = sc.nextLine();
+            if (!"skip".equalsIgnoreCase(level.trim())) {
+                courseToUpdate.setLevel(level);
+            }
+
+            ICourseDao.updateCourseById(courseToUpdate);
+            System.out.println("Course updated successfully!");
+
+        } catch (DaoException e) {
+            System.out.println("Error updating course: " + e.getMessage());
+        } catch (NumberFormatException e) {
+            System.out.println("Invalid number format, please try again.");
+        }
+    }
+    /**
+     //
+     //     * Author: Meghana Rathnam
+     //
+     //     * Date: 9-April 2024
+     //
+     //     */
+    public static void updateDepartmentOption() {
+        Scanner sc = new Scanner(System.in);
+        System.out.println("Enter the ID of the department you wish to update:");
+        int id = sc.nextInt();
+        sc.nextLine();
+
+        try {
+            Department departmentToUpdate = IDepartmentDao.findDepartmentById(id);
+            if (departmentToUpdate == null) {
+                System.out.println("Department with ID " + id + " not found.");
+                return;
+            }
+
+            System.out.println("Current Department Name: " + departmentToUpdate.getDepartmentName());
+            System.out.print("New Name: ");
+            String newName = sc.nextLine();
+
+            departmentToUpdate.setDepartmentName(newName);
+            IDepartmentDao.updateDepartmentById(departmentToUpdate);
+            System.out.println("Department updated successfully!");
+        } catch (DaoException e) {
+            System.out.println("Error updating department: " + e.getMessage());
+        }
+    }
+    /**
+     //
+     //     * Author: Meghana Rathnam
+     //
+     //     * Date: 9-April 2024
+     //
+     //     */
+    public static void updateModuleOption() {
+        Scanner sc = new Scanner(System.in);
+
+        System.out.println("Enter the ID of the module you wish to update:");
+        int id = sc.nextInt();
+        sc.nextLine();
+
+        try {
+            Module moduleToUpdate = IModuleDao.findModuleById(id);
+            if (moduleToUpdate == null) {
+                System.out.println("Module with ID " + id + " not found.");
+                return;
+            }
+
+            System.out.print("Module Name [" + moduleToUpdate.getModuleName() + "]: ");
+            String moduleName = sc.nextLine();
+            if (!moduleName.trim().isEmpty()) {
+                moduleToUpdate.setModuleName(moduleName);
+            }
+
+            System.out.print("Credits [" + moduleToUpdate.getCredits() + "]: ");
+            String creditsStr = sc.nextLine();
+            if (!creditsStr.trim().isEmpty()) {
+                int credits = Integer.parseInt(creditsStr);
+                moduleToUpdate.setCredits(credits);
+            }
+
+            IModuleDao.updateModuleById(moduleToUpdate);
+            System.out.println("Module updated successfully!");
+        } catch (DaoException e) {
+            System.out.println("Error updating module: " + e.getMessage());
+        } catch (NumberFormatException e) {
+            System.out.println("Invalid number format, please try again.");
+        }
+    }
 //    public static void deleteByIdOption()
 //    {
 //        try
@@ -404,183 +896,7 @@ public class App
 //        }
 //    }
 //
-//    public static void insertStudentOption(){
-//        Scanner sc = new Scanner(System.in);
-//
-//        try {
-//            System.out.println("Enter student details : ");
-//
-//            System.out.print("First Name: ");
-//            String firstName = sc.next();
-//
-//            sc.nextLine();
-//
-//            System.out.print("Last Name: ");
-//            String lastName = sc.next();
-//
-//            sc.nextLine();
-//
-//            System.out.print("Birth Date (YYYY-MM-DD): ");
-//            Date birthDate = Date.valueOf(sc.nextLine());
-//
-//            System.out.print("Email: ");
-//            String email = sc.next();
-//
-//            System.out.print("Phone: ");
-//            String phone = sc.next();
-//
-//            sc.nextLine();
-//
-//            System.out.print("Address: ");
-//            String address = sc.nextLine();
-//
-//            System.out.print("Course Full Name: ");
-//            String courseFullName = sc.nextLine();
-//
-//            System.out.print("Course Status: ");
-//            String courseStatus = sc.nextLine();
-//
-//            System.out.print("Has Paid Full Fee (true/false): ");
-//            boolean hasPaidFullFee = sc.nextBoolean();
-//
-//            sc.nextLine();
-//
-//            System.out.print("Class Group: ");
-//            String classGroup = sc.nextLine();
-//
-//            System.out.print("Graduation Year: ");
-//            int graduationYear = sc.nextInt();
-//
-//            System.out.print("Current GPA: ");
-//            double currentGPA = sc.nextDouble();
-//
-//            Student newStudent = new Student(firstName, lastName, birthDate, email, phone, address, courseFullName, courseStatus, hasPaidFullFee, classGroup, graduationYear, currentGPA);
-//
-//            IStudentDao.insertNewStudent(newStudent);
-//            System.out.println("New student added successfully!");
-//        } catch (DaoException e) {
-//            System.out.println("Error adding new student: " + e.getMessage());
-//            e.printStackTrace();
-//        }
-//    }
-//
-//
-//    /**
-//     * Author: Meghana Rathnam
-//     * Date: 15-Mar 2024
-//     */
-//    public static void updateStudentOption() {
-//        Scanner sc = new Scanner(System.in);
-//
-//        try {
-//            System.out.println("Enter the ID of the student you wish to update: ");
-//            int id = sc.nextInt();
-//            sc.nextLine();
-//
-//            Student studentToUpdate = IStudentDao.findStudentById(id);
-//            if (studentToUpdate == null) {
-//                System.out.println("Student with ID " + id + " not found.");
-//                return;
-//            }
-//
-//            System.out.println("Enter 'skip' for any field you do not wish to update.");
-//
-//            System.out.print("First Name [" + studentToUpdate.getFirstName() + "]: ");
-//            String firstName = sc.nextLine();
-//            if (!"skip".equalsIgnoreCase(firstName.trim())) {
-//                studentToUpdate.setFirstName(firstName);
-//            }
-//
-//            System.out.print("Last Name [" + studentToUpdate.getLastName() + "]: ");
-//            String lastName = sc.nextLine();
-//            if (!"skip".equalsIgnoreCase(lastName.trim())) {
-//                studentToUpdate.setLastName(lastName);
-//            }
-//
-//            System.out.print("Birth Date (YYYY-MM-DD) [" + studentToUpdate.getBirthDate() + "]: ");
-//            String birthDateStr = sc.nextLine();
-//            if (!"skip".equalsIgnoreCase(birthDateStr.trim())) {
-//                try {
-//                    Date birthDate = Date.valueOf(birthDateStr);
-//                    studentToUpdate.setBirthDate(birthDate);
-//                } catch (IllegalArgumentException e) {
-//                    System.out.println("Invalid date format, field not updated.");
-//                }
-//            }
-//
-//            System.out.print("Email [" + studentToUpdate.getStudentEmail() + "]: ");
-//            String email = sc.nextLine();
-//            if (!"skip".equalsIgnoreCase(email.trim())) {
-//                studentToUpdate.setStudentEmail(email);
-//            }
-//
-//            System.out.print("Phone [" + studentToUpdate.getStudentPhone() + "]: ");
-//            String phone = sc.nextLine();
-//            if (!"skip".equalsIgnoreCase(phone.trim())) {
-//                studentToUpdate.setStudentPhone(phone);
-//            }
-//
-//            System.out.print("Address [" + studentToUpdate.getAddress() + "]: ");
-//            String address = sc.nextLine();
-//            if (!"skip".equalsIgnoreCase(address.trim())) {
-//                studentToUpdate.setAddress(address);
-//            }
-//
-//            System.out.print("Course Full Name [" + studentToUpdate.getCourseFullName() + "]: ");
-//            String courseFullName = sc.nextLine();
-//            if (!"skip".equalsIgnoreCase(courseFullName.trim())) {
-//                studentToUpdate.setCourseFullName(courseFullName);
-//            }
-//
-//            System.out.print("Course Status [" + studentToUpdate.getCourseStatus() + "]: ");
-//            String courseStatus = sc.nextLine();
-//            if (!"skip".equalsIgnoreCase(courseStatus.trim())) {
-//                studentToUpdate.setCourseStatus(courseStatus);
-//            }
-//
-//            System.out.print("Has Paid Full Fee (true/false) [" + studentToUpdate.isHasPaidFullFee() + "]: ");
-//            String hasPaidFullFeeStr = sc.nextLine();
-//            if (!"skip".equalsIgnoreCase(hasPaidFullFeeStr.trim())) {
-//                boolean hasPaidFullFee = Boolean.parseBoolean(hasPaidFullFeeStr);
-//                studentToUpdate.setHasPaidFullFee(hasPaidFullFee);
-//            }
-//
-//            System.out.print("Class Group [" + studentToUpdate.getClassGroup() + "]: ");
-//            String classGroup = sc.nextLine();
-//            if (!"skip".equalsIgnoreCase(classGroup.trim())) {
-//                studentToUpdate.setClassGroup(classGroup);
-//            }
-//
-//            System.out.print("Graduation Year: ");
-//            String graduationYearStr = sc.nextLine();
-//            if (!"skip".equalsIgnoreCase(graduationYearStr.trim())) {
-//                try {
-//                    int graduationYear = Integer.parseInt(graduationYearStr);
-//                    studentToUpdate.setGraduationYear(graduationYear);
-//                } catch (NumberFormatException e) {
-//                    System.out.println("Invalid number format, field not updated.");
-//                }
-//            }
-//
-//            System.out.print("Current GPA: ");
-//            String currentGPAStr = sc.nextLine();
-//            if (!"skip".equalsIgnoreCase(currentGPAStr.trim())) {
-//                try {
-//                    double currentGPA = Double.parseDouble(currentGPAStr);
-//                    studentToUpdate.setCurrentGPA(currentGPA);
-//                } catch (NumberFormatException e) {
-//                    System.out.println("Invalid number format, field not updated.");
-//                }
-//            }
-//
-//            IStudentDao.updateStudentById(id, studentToUpdate);
-//            System.out.println("Student updated successfully!");
-//
-//        } catch (DaoException e) {
-//            System.out.println("Error updating student: " + e.getMessage());
-//            e.printStackTrace();
-//        }
-//    }
+
 //    /**
 //     * Author: Conor Gilbert
 //     * Date: 15-Mar 2024

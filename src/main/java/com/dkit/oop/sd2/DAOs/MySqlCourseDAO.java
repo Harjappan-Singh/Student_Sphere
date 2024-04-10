@@ -120,4 +120,86 @@ public class MySqlCourseDAO extends MySqlDao implements CourseDAOInterface {
         }
         return cs;
     }
+    /**
+     //
+     //     * Author: Meghana Rathnam
+     //
+     //     * Date: 9-April 2024
+     //
+     //     */
+    @Override
+    public void insertNewCourse(Course course) throws DaoException {
+        Connection connection = null;
+        PreparedStatement preparedStatement = null;
+        try {
+            connection = this.getConnection();
+            String query = "INSERT INTO Courses (course_name, course_code, department_id, credits, level) VALUES (?, ?, ?, ?, ?)";
+            preparedStatement = connection.prepareStatement(query);
+            preparedStatement.setString(1, course.getCourseName());
+            preparedStatement.setString(2, course.getCourseCode());
+            preparedStatement.setInt(3, course.getDepartmentID());
+            preparedStatement.setInt(4, course.getCredits());
+            preparedStatement.setString(5, course.getLevel());
+
+            int affectedRows = preparedStatement.executeUpdate();
+            if (affectedRows == 0) {
+                throw new DaoException("Creating course failed, no rows affected.");
+            }
+        } catch (SQLException e) {
+            throw new DaoException("insertNewCourse() " + e.getMessage());
+        } finally {
+            try {
+                if (preparedStatement != null) {
+                    preparedStatement.close();
+                }
+                if (connection != null) {
+                    freeConnection(connection);
+                }
+            } catch (SQLException e) {
+                throw new DaoException("insertNewCourse() finally " + e.getMessage());
+            }
+        }
+    }
+    /**
+     //
+     //     * Author: Meghana Rathnam
+     //
+     //     * Date: 9-April 2024
+     //
+     //     */
+    @Override
+    public void updateCourseById(Course course) throws DaoException {
+        Connection connection = null;
+        PreparedStatement preparedStatement = null;
+        try {
+            connection = this.getConnection();
+            String query = "UPDATE Courses SET course_name = ?, course_code = ?, department_id = ?, credits = ?, level = ? WHERE course_id = ?";
+
+            preparedStatement = connection.prepareStatement(query);
+            preparedStatement.setString(1, course.getCourseName());
+            preparedStatement.setString(2, course.getCourseCode());
+            preparedStatement.setInt(3, course.getDepartmentID());
+            preparedStatement.setInt(4, course.getCredits());
+            preparedStatement.setString(5, course.getLevel());
+            preparedStatement.setInt(6, course.getCourseID());
+
+            int affectedRows = preparedStatement.executeUpdate();
+            if (affectedRows == 0) {
+                throw new DaoException("Updating course failed, no rows affected.");
+            }
+        } catch (SQLException e) {
+            throw new DaoException("updateCourseById() " + e.getMessage());
+        } finally {
+            try {
+                if (preparedStatement != null) {
+                    preparedStatement.close();
+                }
+                if (connection != null) {
+                    freeConnection(connection);
+                }
+            } catch (SQLException e) {
+                throw new DaoException("updateCourseById() finally " + e.getMessage());
+            }
+        }
+    }
 }

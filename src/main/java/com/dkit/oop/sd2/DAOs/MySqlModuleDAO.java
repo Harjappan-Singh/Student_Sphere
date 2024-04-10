@@ -111,4 +111,54 @@ public class MySqlModuleDAO extends MySqlDao implements ModuleDAOInterface {
         }
         return md;
     }
+
+    /**
+     //
+     //     * Author: Meghana Rathnam
+     //
+     //     * Date: 9-April 2024
+     //
+     //     */
+    @Override
+    public void insertNewModule(Module module) throws DaoException {
+        try (Connection connection = this.getConnection()) {
+            String query = "INSERT INTO Modules (module_name, credits) VALUES (?, ?)";
+            try (PreparedStatement preparedStatement = connection.prepareStatement(query)) {
+                preparedStatement.setString(1, module.getModuleName());
+                preparedStatement.setInt(2, module.getCredits());
+
+                int affectedRows = preparedStatement.executeUpdate();
+                if (affectedRows == 0) {
+                    throw new DaoException("Creating module failed, no rows affected.");
+                }
+            }
+        } catch (SQLException e) {
+            throw new DaoException("insertNewModule() " + e.getMessage());
+        }
+    }
+    /**
+     //
+     //     * Author: Meghana Rathnam
+     //
+     //     * Date: 9-April 2024
+     //
+     //     */
+    @Override
+    public void updateModuleById(Module module) throws DaoException {
+        try (Connection connection = this.getConnection()) {
+            String query = "UPDATE Modules SET module_name = ?, credits = ? WHERE module_id = ?";
+            try (PreparedStatement preparedStatement = connection.prepareStatement(query)) {
+                preparedStatement.setString(1, module.getModuleName());
+                preparedStatement.setInt(2, module.getCredits());
+                preparedStatement.setInt(3, module.getModuleID());
+
+                int affectedRows = preparedStatement.executeUpdate();
+                if (affectedRows == 0) {
+                    throw new DaoException("Updating module failed, no rows affected.");
+                }
+            }
+        } catch (SQLException e) {
+            throw new DaoException("updateModuleById() " + e.getMessage());
+        }
+    }
 }
