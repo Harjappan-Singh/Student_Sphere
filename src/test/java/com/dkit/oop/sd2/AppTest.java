@@ -1,10 +1,10 @@
 package com.dkit.oop.sd2;
 
 import static org.junit.Assert.*;
-import com.dkit.oop.sd2.DAOs.MySqlStudentDao;
-import com.dkit.oop.sd2.DAOs.StudentDaoInterface;
-import com.dkit.oop.sd2.DTOs.Student;
-import com.dkit.oop.sd2.Exceptions.DaoException;
+import com.dkit.oop.sd2.Server.DAOs.MySqlStudentDao;
+import com.dkit.oop.sd2.Server.DAOs.StudentDaoInterface;
+import com.dkit.oop.sd2.Server.DTOs.Student;
+import com.dkit.oop.sd2.Server.Exceptions.DaoException;
 import org.junit.Test;
 
 import java.sql.Date;

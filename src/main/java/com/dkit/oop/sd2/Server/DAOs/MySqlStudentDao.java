@@ -1,7 +1,7 @@
-package com.dkit.oop.sd2.DAOs;
+package com.dkit.oop.sd2.Server.DAOs;
 
-import com.dkit.oop.sd2.DTOs.Student;
-import com.dkit.oop.sd2.Exceptions.DaoException;
+import com.dkit.oop.sd2.Server.DTOs.Student;
+import com.dkit.oop.sd2.Server.Exceptions.DaoException;
 
 import java.sql.*;
 import java.util.ArrayList;
