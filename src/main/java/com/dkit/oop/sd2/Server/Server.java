@@ -1,6 +1,7 @@
 package com.dkit.oop.sd2.Server;
 
 import com.dkit.oop.sd2.BusinessObjects.JSONConverter;
+import com.dkit.oop.sd2.Protocol.Protocol_Constants;
 import com.dkit.oop.sd2.Server.DAOs.*;
 import com.dkit.oop.sd2.Server.DTOs.Course;
 import com.dkit.oop.sd2.Server.DTOs.Department;
@@ -17,7 +18,7 @@ import java.net.Socket;
 
 
 public class Server {
-    final int SERVER_PORT_NUMBER = 8888;
+    final int SERVER_PORT_NUMBER = 8881;
 
     public static void main(String[] args) {
         Server server = new Server();
@@ -104,14 +105,13 @@ class ClientHandler implements Runnable
                 System.out.println("Server: (ClientHandler): Read command from client " + clientNumber + ": " + request);
 
                 // Implementation our PROTOCOL
-                if(request.startsWith("Display By ID ")){
-                    if (request.startsWith("Display By ID Student - "))
+                    if (request.startsWith(Protocol_Constants.DISPLAY_STUDENT_BY_ID))
                     {
                         try
                         {
                             StudentDaoInterface IStudentDao = new MySqlStudentDao();
                             int id;
-                            id = Integer.valueOf(request.substring(24));
+                            id = Integer.valueOf(request.substring(21));
                             Student student = IStudentDao.findStudentById(id);
 
                             if( student != null ) {
@@ -127,12 +127,12 @@ class ClientHandler implements Runnable
                             e.printStackTrace();
                         }
                         System.out.println("Server message: Student sent to client.");
-                    } else if (request.startsWith("Display By ID Course - ")) {
+                    } else if (request.startsWith(Protocol_Constants.DISPLAY_COURSE_BY_ID)) {
                         try
                         {
                             CourseDAOInterface ICourseDao = new MySqlCourseDAO();
                             int id;
-                            id = Integer.valueOf(request.substring(23));
+                            id = Integer.valueOf(request.substring(20));
                             Course cs = ICourseDao.findCourseById(id);
 
                             if( cs != null ) {
@@ -148,12 +148,12 @@ class ClientHandler implements Runnable
                             e.printStackTrace();
                         }
                         System.out.println("Server message: Course sent to client.");
-                    } else if (request.startsWith("Display By ID Department - ")) {
+                    } else if (request.startsWith(Protocol_Constants.DISPLAY_DEPARTMENT_BY_ID)) {
                         try
                         {
                             DepartmentDAOInterface IDepartmentDao = new MySqlDepartmentDAO();
                             int id;
-                            id = Integer.valueOf(request.substring(27));
+                            id = Integer.valueOf(request.substring(24));
                             Department dt = IDepartmentDao.findDepartmentById(id);
 
                             if( dt != null ) {
@@ -169,12 +169,12 @@ class ClientHandler implements Runnable
                             e.printStackTrace();
                         }
                         System.out.println("Server message: Department sent to client.");
-                    } else if (request.startsWith("Display By ID Module - ")) {
+                    } else if (request.startsWith(Protocol_Constants.DISPLAY_MODULE_BY_ID)) {
                         try
                         {
                             ModuleDAOInterface IModuleDao = new MySqlModuleDAO();
                             int id;
-                            id = Integer.valueOf(request.substring(23));
+                            id = Integer.valueOf(request.substring(20));
                             Module md = IModuleDao.findModuleById(id);
 
                             if( md != null ) {
@@ -191,7 +191,7 @@ class ClientHandler implements Runnable
                         }
                         System.out.println("Server message: Module sent to client.");
                     }
-                } else if (request.startsWith("quit"))
+                 else if (request.startsWith("quit"))
                 {
                     socketWriter.println("Sorry to see you leaving. Goodbye.");
                     System.out.println("Server message: Client has notified us that it is quitting.");

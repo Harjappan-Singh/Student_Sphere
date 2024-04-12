@@ -1,6 +1,7 @@
 package com.dkit.oop.sd2.Client;
 
 import com.dkit.oop.sd2.BusinessObjects.JSONConverter;
+import com.dkit.oop.sd2.Protocol.Protocol_Constants;
 import com.dkit.oop.sd2.Server.DTOs.Course;
 import com.dkit.oop.sd2.Server.DTOs.Department;
 import com.dkit.oop.sd2.Server.DTOs.Module;
@@ -31,7 +32,7 @@ public class Client {
     public void start() {
 
         try (   // create socket to connect to the server
-                Socket socket = new Socket("localhost", 8888);
+                Socket socket = new Socket("localhost", 8881);
                 // get the socket's input and output streams, and wrap them in writer and readers
                 PrintWriter out = new PrintWriter(socket.getOutputStream(), true);
                 BufferedReader in = new BufferedReader(new InputStreamReader(socket.getInputStream()));
@@ -47,34 +48,31 @@ public class Client {
 
                 // process the answer returned by the server
                 //
-                if (userRequest.startsWith("Display By ID "))
-                {
-                    if(userRequest.startsWith("Display By ID Student")){
+                    if(userRequest.startsWith(Protocol_Constants.DISPLAY_STUDENT_BY_ID)){
                         String userString = in.readLine(); // (blocks) waits for response from server, then input string terminated by a newline character ("\n")
-                        System.out.println("----Client message: Response from server after \"Display By ID Student- \" request----");
+                        System.out.println("----Client message: Response from server after \"Display Student By ID - \" request----");
                         Gson gsonParser = new Gson();
                         Student student = gsonParser.fromJson(userString, Student.class);
                         System.out.println(student);
-                    } else if (userRequest.startsWith("Display By ID Course")) {
+                    } else if (userRequest.startsWith(Protocol_Constants.DISPLAY_COURSE_BY_ID)) {
                         String userString = in.readLine();
-                        System.out.println("----Client message: Response from server after \"Display By ID Course- \" request----");
+                        System.out.println("----Client message: Response from server after \"Display Course By ID  - \" request----");
                         Gson gsonParser = new Gson();
                         Course cs = gsonParser.fromJson(userString, Course.class);
                         System.out.println(cs);
-                    } else if (userRequest.startsWith("Display By ID Department")) {
+                    } else if (userRequest.startsWith(Protocol_Constants.DISPLAY_DEPARTMENT_BY_ID)) {
                         String userString = in.readLine();
-                        System.out.println("----Client message: Response from server after \"Display By ID Department- \" request----");
+                        System.out.println("----Client message: Response from server after \"Display Department By ID - \" request----");
                         Gson gsonParser = new Gson();
                         Department dt = gsonParser.fromJson(userString, Department.class);
                         System.out.println(dt);
-                    } else if (userRequest.startsWith("Display By ID Module")) {
+                    } else if (userRequest.startsWith(Protocol_Constants.DISPLAY_MODULE_BY_ID)) {
                         String userString = in.readLine();
-                        System.out.println("----Client message: Response from server after \"Display By ID Module- \" request----");
+                        System.out.println("----Client message: Response from server after \"Display Module By ID - \" request----");
                         Gson gsonParser = new Gson();
                         Module md = gsonParser.fromJson(userString, Module.class);
                         System.out.println(md);
-                    }
-                }else if (userRequest.startsWith("quit")) // if the user has entered the "quit" command
+                    } else if (userRequest.startsWith("quit")) // if the user has entered the "quit" command
                 {
                     String response = in.readLine();   // wait for response -
                     System.out.println("Client message: Response from server: \"" + response + "\"");
@@ -205,7 +203,7 @@ public class Client {
         System.out.println("Please enter the student id: ");
         Scanner kbr = new Scanner(System.in);
         id = kbr.nextInt();
-        return "Display By ID Student - "+ id;
+        return Protocol_Constants.DISPLAY_STUDENT_BY_ID + id;
     }
 
     public static String displayCourseByID(){
@@ -213,7 +211,7 @@ public class Client {
         System.out.println("Please enter the course id: ");
         Scanner kbr = new Scanner(System.in);
         id = kbr.nextInt();
-        return "Display By ID Course - "+ id;
+        return Protocol_Constants.DISPLAY_COURSE_BY_ID+ id;
     }
 
     public static String displayDepartmentByID(){
@@ -221,14 +219,15 @@ public class Client {
         System.out.println("Please enter the Department id: ");
         Scanner kbr = new Scanner(System.in);
         id = kbr.nextInt();
-        return "Display By ID Department - "+ id;
+        return Protocol_Constants.DISPLAY_DEPARTMENT_BY_ID+ id;
     }
     public static String displayModuleByID(){
         int id;
         System.out.println("Please enter the module id: ");
         Scanner kbr = new Scanner(System.in);
         id = kbr.nextInt();
-        return "Display By ID Module - "+ id;
+        return Protocol_Constants.DISPLAY_MODULE_BY_ID+ id;
+
     }
 
 }
