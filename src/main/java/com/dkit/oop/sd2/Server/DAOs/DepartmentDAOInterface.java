@@ -11,7 +11,7 @@ public interface DepartmentDAOInterface
 
     public Department findDepartmentById(int id) throws DaoException;
 
-    void insertNewDepartment(Department department) throws DaoException;
+    Department insertNewDepartment(Department department) throws DaoException;
     void updateDepartmentById(Department department) throws DaoException;
 
 }

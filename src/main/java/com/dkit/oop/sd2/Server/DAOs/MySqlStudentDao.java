@@ -193,18 +193,18 @@ public class MySqlStudentDao extends MySqlDao implements StudentDaoInterface{
      * Date: 7-Mar 2024
      */
     @Override
-    public void insertNewStudent(Student student) throws DaoException {
+    public Student insertNewStudent(Student student) throws DaoException {
         Connection connection = null;
         PreparedStatement preparedStatement = null;
+        ResultSet resultSet = null;
         try {
             connection = this.getConnection();
 
 
-            String query = "INSERT INTO STUDENTS(id,first_name, last_name, birth_date, student_email, student_phone, address,  graduation_year,has_paid_full_fee, current_gpa,course_id) " +
-                    "VALUES (null,?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+            String query = "INSERT INTO STUDENTS(first_name, last_name, birth_date, student_email, student_phone, address,  graduation_year,has_paid_full_fee, current_gpa,course_id) " +
+                    "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
 
             preparedStatement = connection.prepareStatement(query);
-
 
             preparedStatement.setString(1, student.getFirstName());
             preparedStatement.setString(2, student.getLastName());
@@ -217,13 +217,27 @@ public class MySqlStudentDao extends MySqlDao implements StudentDaoInterface{
             preparedStatement.setDouble(9, student.getCurrentGPA());
             preparedStatement.setInt(10, student.getCourseId());
 
+            int affectedRows = preparedStatement.executeUpdate();
+            if (affectedRows == 0) {
+                throw new SQLException("Creating student failed, no rows affected.");
+            }
 
-            int rowCount = preparedStatement.executeUpdate();
-            System.out.println(rowCount + " row(s) affected");
+            String idQuery = "SELECT id FROM STUDENTS WHERE student_email = ? ORDER BY id DESC LIMIT 1";
+            preparedStatement = connection.prepareStatement(idQuery);
+            preparedStatement.setString(1, student.getStudentEmail());
+            resultSet = preparedStatement.executeQuery();
+            if (resultSet.next()) {
+                student.setId(resultSet.getInt("id"));
+            }
+
+            System.out.println(affectedRows + " row(s) affected");
         } catch (SQLException e) {
             throw new DaoException("insertNewStudent() " + e.getMessage());
         } finally {
             try {
+                if (resultSet != null) {
+                    resultSet.close();
+                }
                 if (preparedStatement != null) {
                     preparedStatement.close();
                 }
@@ -231,9 +245,10 @@ public class MySqlStudentDao extends MySqlDao implements StudentDaoInterface{
                     freeConnection(connection);
                 }
             } catch (SQLException e) {
-                throw new DaoException("insertNewStudent() " + e.getMessage());
+                throw new DaoException("insertNewStudent() finally " + e.getMessage());
             }
         }
+        return student;
     }
 
     /**

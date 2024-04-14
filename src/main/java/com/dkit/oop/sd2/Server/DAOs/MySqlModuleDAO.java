@@ -111,27 +111,60 @@ public class MySqlModuleDAO extends MySqlDao implements ModuleDAOInterface {
     }
 
     /**
-     //
-     //     * Author: Meghana Rathnam
-     //
-     //     * Date: 9-April 2024
-     //
-     //     */
+     * //
+     * //     * Author: Meghana Rathnam
+     * //
+     * //     * Date: 9-April 2024
+     * //
+     * //
+     *
+     * @return
+     */
     @Override
-    public void insertNewModule(Module module) throws DaoException {
-        try (Connection connection = this.getConnection()) {
-            String query = "INSERT INTO Modules (module_name, credits) VALUES (?, ?)";
-            try (PreparedStatement preparedStatement = connection.prepareStatement(query)) {
-                preparedStatement.setString(1, module.getModuleName());
-                preparedStatement.setInt(2, module.getCredits());
+    public Module insertNewModule(Module module) throws DaoException {
+        Connection connection = null;
+        PreparedStatement preparedStatement = null;
+        ResultSet resultSet = null;
+        try {
+            connection = this.getConnection();
 
-                int affectedRows = preparedStatement.executeUpdate();
-                if (affectedRows == 0) {
-                    throw new DaoException("Creating module failed, no rows affected.");
-                }
+            String query = "INSERT INTO Modules (module_name, credits) VALUES (?, ?)";
+            preparedStatement = connection.prepareStatement(query);
+            preparedStatement.setString(1, module.getModuleName());
+            preparedStatement.setInt(2, module.getCredits());
+
+            int affectedRows = preparedStatement.executeUpdate();
+            if (affectedRows == 0) {
+                throw new SQLException("Creating module failed, no rows affected.");
             }
+
+            String idQuery = "SELECT module_id FROM Modules WHERE module_name = ? ORDER BY module_id DESC LIMIT 1";
+            preparedStatement = connection.prepareStatement(idQuery);
+            preparedStatement.setString(1, module.getModuleName());
+            resultSet = preparedStatement.executeQuery();
+            if (resultSet.next()) {
+                module.setModuleID(resultSet.getInt("module_id"));
+            } else {
+                throw new DaoException("Failed to fetch module ID after insertion.");
+            }
+
+            return module;
         } catch (SQLException e) {
             throw new DaoException("insertNewModule() " + e.getMessage());
+        } finally {
+            try {
+                if (resultSet != null) {
+                    resultSet.close();
+                }
+                if (preparedStatement != null) {
+                    preparedStatement.close();
+                }
+                if (connection != null) {
+                    freeConnection(connection);
+                }
+            } catch (SQLException e) {
+                throw new DaoException("insertNewModule() finally " + e.getMessage());
+            }
         }
     }
     /**

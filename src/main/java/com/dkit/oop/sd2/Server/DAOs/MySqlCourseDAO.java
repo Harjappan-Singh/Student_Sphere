@@ -127,9 +127,10 @@ public class MySqlCourseDAO extends MySqlDao implements CourseDAOInterface {
      //
      //     */
     @Override
-    public void insertNewCourse(Course course) throws DaoException {
+    public Course insertNewCourse(Course course) throws DaoException {
         Connection connection = null;
         PreparedStatement preparedStatement = null;
+        ResultSet resultSet = null;
         try {
             connection = this.getConnection();
             String query = "INSERT INTO Courses (course_name, course_code, department_id, credits, level) VALUES (?, ?, ?, ?, ?)";
@@ -143,6 +144,12 @@ public class MySqlCourseDAO extends MySqlDao implements CourseDAOInterface {
             int affectedRows = preparedStatement.executeUpdate();
             if (affectedRows == 0) {
                 throw new DaoException("Creating course failed, no rows affected.");
+            }   String idQuery = "SELECT course_id FROM COURSES WHERE course_code = ? ORDER BY course_id DESC LIMIT 1";
+            preparedStatement = connection.prepareStatement(idQuery);
+            preparedStatement.setString(1, course.getCourseCode());
+            resultSet = preparedStatement.executeQuery();
+            if (resultSet.next()) {
+                course.setCourseID(resultSet.getInt("course_id"));
             }
         } catch (SQLException e) {
             throw new DaoException("insertNewCourse() " + e.getMessage());
@@ -158,6 +165,7 @@ public class MySqlCourseDAO extends MySqlDao implements CourseDAOInterface {
                 throw new DaoException("insertNewCourse() finally " + e.getMessage());
             }
         }
+        return course;
     }
     /**
      //

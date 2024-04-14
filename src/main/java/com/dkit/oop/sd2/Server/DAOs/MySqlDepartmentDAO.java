@@ -116,19 +116,49 @@ public class MySqlDepartmentDAO extends MySqlDao implements DepartmentDAOInterfa
      //     */
 
     @Override
-    public void insertNewDepartment(Department department) throws DaoException {
-        try (Connection connection = this.getConnection()) {
-            String query = "INSERT INTO Departments (department_name) VALUES (?)";
-            try (PreparedStatement preparedStatement = connection.prepareStatement(query)) {
-                preparedStatement.setString(1, department.getDepartmentName());
+    public Department insertNewDepartment(Department department) throws DaoException {
+        Connection connection = null;
+        PreparedStatement preparedStatement = null;
+        ResultSet resultSet = null;
+        try {
+            connection = this.getConnection();
 
-                int affectedRows = preparedStatement.executeUpdate();
-                if (affectedRows == 0) {
-                    throw new DaoException("Creating department failed, no rows affected.");
-                }
+            String query = "INSERT INTO Departments (department_name) VALUES (?)";
+            preparedStatement = connection.prepareStatement(query);
+            preparedStatement.setString(1, department.getDepartmentName());
+
+            int affectedRows = preparedStatement.executeUpdate();
+            if (affectedRows == 0) {
+                throw new SQLException("Creating department failed, no rows affected.");
             }
+
+            String idQuery = "SELECT department_id FROM Departments WHERE department_name = ? ORDER BY department_id DESC LIMIT 1";
+            preparedStatement = connection.prepareStatement(idQuery);
+            preparedStatement.setString(1, department.getDepartmentName());
+            resultSet = preparedStatement.executeQuery();
+            if (resultSet.next()) {
+                department.setDepartmentID(resultSet.getInt("department_id"));
+            } else {
+                throw new DaoException("Failed to fetch department ID after insertion.");
+            }
+
+            return department;
         } catch (SQLException e) {
             throw new DaoException("insertNewDepartment() " + e.getMessage());
+        } finally {
+            try {
+                if (resultSet != null) {
+                    resultSet.close();
+                }
+                if (preparedStatement != null) {
+                    preparedStatement.close();
+                }
+                if (connection != null) {
+                    freeConnection(connection);
+                }
+            } catch (SQLException e) {
+                throw new DaoException("insertNewDepartment() finally " + e.getMessage());
+            }
         }
     }
     /**

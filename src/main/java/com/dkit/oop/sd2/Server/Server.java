@@ -15,6 +15,9 @@ import java.io.InputStreamReader;
 import java.io.PrintWriter;
 import java.net.ServerSocket;
 import java.net.Socket;
+import com.google.gson.Gson;
+
+
 
 
 public class Server {
@@ -190,6 +193,89 @@ class ClientHandler implements Runnable
                             e.printStackTrace();
                         }
                         System.out.println("Server message: Module sent to client.");
+                    } else if (request.startsWith(Protocol_Constants.ADD_STUDENT)) {
+                        try {
+                            String json = request.substring(Protocol_Constants.ADD_STUDENT.length());
+                            Gson gson = new Gson();
+                            Student student = gson.fromJson(json, Student.class);
+
+                            StudentDaoInterface studentDao = new MySqlStudentDao();
+                            Student addedStudent = studentDao.insertNewStudent(student);
+
+                            if (addedStudent != null && addedStudent.getId() != 0) {
+                                String responseJson = gson.toJson(addedStudent);
+                                socketWriter.println(responseJson);
+                            } else {
+                                String errorJson = "{\"error\":\"Failed to add student\",\"message\":\"Operation failed\"}";
+                                socketWriter.println(errorJson);
+                            }
+                        } catch (DaoException e) {
+                            String errorJson = "{\"error\":\"Error adding student\",\"message\":\"" + e.getMessage() + "\"}";
+                            socketWriter.println(errorJson);
+                        }
+                    }
+                    else if (request.startsWith(Protocol_Constants.ADD_COURSE)) {
+                        try {
+                            String json = request.substring(Protocol_Constants.ADD_COURSE.length());
+                            Gson gson = new Gson();
+                            Course course = gson.fromJson(json, Course.class);
+
+                            CourseDAOInterface courseDao = new MySqlCourseDAO();
+                            Course addedCourse = courseDao.insertNewCourse(course);
+
+                            if (addedCourse != null && addedCourse.getCourseID() != 0) {
+                                String responseJson = gson.toJson(addedCourse);
+                                socketWriter.println(responseJson);
+                            } else {
+                                String errorJson = "{\"error\":\"Failed to add course\",\"message\":\"Operation failed\"}";
+                                socketWriter.println(errorJson);
+                            }
+                        } catch (DaoException e) {
+                            String errorJson = "{\"error\":\"Error adding course\",\"message\":\"" + e.getMessage() + "\"}";
+                            socketWriter.println(errorJson);
+                        }
+                    }
+                    else if (request.startsWith(Protocol_Constants.ADD_DEPARTMENT)) {
+                        try {
+                            String json = request.substring(Protocol_Constants.ADD_DEPARTMENT.length());
+                            Gson gson = new Gson();
+                            Department department = gson.fromJson(json, Department.class);
+
+                            DepartmentDAOInterface departmentDao = new MySqlDepartmentDAO();
+                            Department addedDepartment = departmentDao.insertNewDepartment(department);
+
+                            if (addedDepartment != null && addedDepartment.getDepartmentID() != 0) {
+                                String responseJson = gson.toJson(addedDepartment);
+                                socketWriter.println(responseJson);
+                            } else {
+                                String errorJson = "{\"error\":\"Failed to add department\",\"message\":\"Operation failed\"}";
+                                socketWriter.println(errorJson);
+                            }
+                        } catch (DaoException e) {
+                            String errorJson = "{\"error\":\"Error adding department\",\"message\":\"" + e.getMessage() + "\"}";
+                            socketWriter.println(errorJson);
+                        }
+                    }
+                    else if (request.startsWith(Protocol_Constants.ADD_MODULE)) {
+                        try {
+                            String json = request.substring(Protocol_Constants.ADD_MODULE.length());
+                            Gson gson = new Gson();
+                            Module module = gson.fromJson(json, Module.class);
+
+                            ModuleDAOInterface moduleDao = new MySqlModuleDAO();
+                            Module addedModule = moduleDao.insertNewModule(module);
+
+                            if (addedModule != null && addedModule.getModuleID() != 0) {
+                                String responseJson = gson.toJson(addedModule);
+                                socketWriter.println(responseJson);
+                            } else {
+                                String errorJson = "{\"error\":\"Failed to add module\",\"message\":\"Operation failed\"}";
+                                socketWriter.println(errorJson);
+                            }
+                        } catch (DaoException e) {
+                            String errorJson = "{\"error\":\"Error adding module\",\"message\":\"" + e.getMessage() + "\"}";
+                            socketWriter.println(errorJson);
+                        }
                     }
                  else if (request.startsWith("quit"))
                 {

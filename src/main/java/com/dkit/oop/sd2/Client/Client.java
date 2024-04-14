@@ -14,6 +14,7 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.PrintWriter;
 import java.net.Socket;
+import java.sql.Date;
 import java.util.Scanner;
 
 /**
@@ -24,6 +25,7 @@ import java.util.Scanner;
  //
  //     */
 public class Client {
+    private static Gson gson = new Gson();
     public static void main(String[] args) {
         Client client = new Client();
         client.start();
@@ -72,7 +74,72 @@ public class Client {
                         Gson gsonParser = new Gson();
                         Module md = gsonParser.fromJson(userString, Module.class);
                         System.out.println(md);
-                    } else if (userRequest.startsWith("quit")) // if the user has entered the "quit" command
+                    }
+                    else if (userRequest.startsWith(Protocol_Constants.ADD_STUDENT)) {
+                        String response = in.readLine();
+                        System.out.println("----Client message: Response from server after \"Add Student\" request----");
+                        if (response != null && response.startsWith("{")) {
+                            try {
+                                Gson gsonParser = new Gson();
+                                Student newStudent = gsonParser.fromJson(response, Student.class);
+                                System.out.println("-----------------------New Student Added Successfully---------------");
+                                System.out.println("Added Student: " + newStudent);
+                            } catch (Exception e) {
+                                System.out.println("Failed to parse response: " + e.getMessage());
+                            }
+                        } else {
+                            System.out.println("Server response: " + response);
+                        }
+                    }
+                    else if (userRequest.startsWith(Protocol_Constants.ADD_COURSE)) {
+                        String response = in.readLine();
+                        System.out.println("----Client message: Response from server after \"Add Course\" request----");
+                        if (response != null && response.startsWith("{")) {
+                            try {
+                                Gson gsonParser = new Gson();
+                                Course newCourse = gsonParser.fromJson(response, Course.class);
+                                System.out.println("-----------------------New Course Added Successfully---------------");
+                                System.out.println("Added Course: " + newCourse);
+                            } catch (Exception e) {
+                                System.out.println("Failed to parse response: " + e.getMessage());
+                            }
+                        } else {
+                            System.out.println("Server response: " + response);
+                        }
+                    }
+                    else if (userRequest.startsWith(Protocol_Constants.ADD_DEPARTMENT)) {
+                        String response = in.readLine();
+                        System.out.println("----Client message: Response from server after \"Add Department\" request----");
+                        if (response != null && response.startsWith("{")) {
+                            try {
+                                Gson gsonParser = new Gson();
+                                Department newDepartment = gsonParser.fromJson(response, Department.class);
+                                System.out.println("-----------------------New Department Added Successfully---------------");
+                                System.out.println("Added Department: " + newDepartment);
+                            } catch (Exception e) {
+                                System.out.println("Failed to parse response: " + e.getMessage());
+                            }
+                        } else {
+                            System.out.println("Server response: " + response);
+                        }
+                    }
+                    else if (userRequest.startsWith(Protocol_Constants.ADD_MODULE)) {
+                        String response = in.readLine();
+                        System.out.println("----Client message: Response from server after \"Add Module\" request----");
+                        if (response != null && response.startsWith("{")) {
+                            try {
+                                Gson gsonParser = new Gson();
+                                Module newModule = gsonParser.fromJson(response, Module.class);
+                                System.out.println("-----------------------New Module Added Successfully---------------");
+                                System.out.println("Added Module: " + newModule);
+                            } catch (Exception e) {
+                                System.out.println("Failed to parse response: " + e.getMessage());
+                            }
+                        } else {
+                            System.out.println("Server response: " + response);
+                        }
+                    }
+                    else if (userRequest.startsWith("quit")) // if the user has entered the "quit" command
                 {
                     String response = in.readLine();   // wait for response -
                     System.out.println("Client message: Response from server: \"" + response + "\"");
@@ -106,7 +173,7 @@ public class Client {
 //            System.out.println("1. Display options");
             System.out.println("2. Display by unique id options");
 //            System.out.println("3. Delete student by an id");
-//            System.out.println("4. Insert Options");
+            System.out.println("4. Add new entity");
 //            System.out.println("5. Update Options");
 //            System.out.println("6. Filter students by their age");
             System.out.println("7. Exit");
@@ -127,8 +194,8 @@ public class Client {
 //                    deleteByIdOption();
                     break;
                 case 4:
-//                    insertOptions();
-                    break;
+                    query = addEntityOptions();
+                    return query;
                 case 5:
 //                    updateOptions();
                     break;
@@ -229,5 +296,190 @@ public class Client {
         return Protocol_Constants.DISPLAY_MODULE_BY_ID+ id;
 
     }
+    /**
+     //     //
+     //     //     * Author: Meghana Rathnam
+     //     //
+     //     //     * Date: 9-April 2024
+     //     //
+     //     //     */
+
+    public static String addEntityOptions(){
+        int userInput = 0;
+        String query ="";
+
+        do {
+            System.out.println("1. Add a new Student");
+            System.out.println("2. Add a new Course");
+            System.out.println("3. Add a new Department");
+            System.out.println("4. Add a new Module");
+            System.out.println("5. Back");
+
+            Scanner sc = new Scanner(System.in);
+            userInput = sc.nextInt();
+
+            switch (userInput) {
+                case 1:
+                    query = insertStudentOption();
+                    return query;
+                case 2:
+                    query = insertNewCourseOption();
+                    return query;
+                case 3:
+                    query = insertNewDepartmentOption();
+                    return query;
+                case 4:
+                    query = insertNewModuleOption();
+                    return query;
+                case 5:
+                    break;
+                default:
+                    System.out.println("Enter a valid option");
+            }
+
+        } while (userInput !=5);
+        return query;
+    }
+
+    /**
+     //     //
+     //     //     * Author: Meghana Rathnam
+     //     //
+     //     //     * Date: 12-April 2024
+     //     //
+     //     //     */
+    public static String insertStudentOption() {
+        Scanner sc = new Scanner(System.in);
+        System.out.println("Enter student details:");
+
+        try {
+            System.out.print("First Name: ");
+            String firstName = sc.next();
+            sc.nextLine();
+
+            System.out.print("Last Name: ");
+            String lastName = sc.next();
+            sc.nextLine();
+
+            System.out.print("Birth Date (YYYY-MM-DD): ");
+            Date birthDate = Date.valueOf(sc.nextLine());
+
+            System.out.print("Email: ");
+            String email = sc.next();
+
+            System.out.print("Phone: ");
+            String phone = sc.next();
+            sc.nextLine();
+
+            System.out.print("Address: ");
+            String address = sc.nextLine();
+
+            System.out.print("Graduation Year: ");
+            int graduationYear = sc.nextInt();
+
+            System.out.print("Has Paid Full Fee (true/false): ");
+            boolean hasPaidFullFee = sc.nextBoolean();
+
+            System.out.print("Current GPA: ");
+            double currentGPA = sc.nextDouble();
+
+            System.out.print("Course ID: ");
+            int courseId = sc.nextInt();
+
+            Student newStudent = new Student(0, firstName, lastName, birthDate, email, phone, address, graduationYear, hasPaidFullFee, currentGPA, courseId);
+            String studentJson = gson.toJson(newStudent);
+            return Protocol_Constants.ADD_STUDENT + studentJson;
+        } catch (Exception e) {
+            System.out.println("Error preparing student data: " + e.getMessage());
+            return null;
+        }
+    }
+    /**
+     //     //
+     //     //     * Author: Meghana Rathnam
+     //     //
+     //     //     * Date: 12-April 2024
+     //     //
+     //     //     */
+    public static String insertNewCourseOption() {
+        Scanner sc = new Scanner(System.in);
+        System.out.println("Enter course details:");
+
+        try {
+            System.out.print("Course Name: ");
+            String courseName = sc.nextLine();
+
+            System.out.print("Course Code: ");
+            String courseCode = sc.nextLine();
+
+            System.out.print("Department ID: ");
+            int departmentId = sc.nextInt();
+
+            System.out.print("Credits: ");
+            int credits = sc.nextInt();
+            sc.nextLine();
+
+            System.out.print("Level: ");
+            String level = sc.nextLine();
+
+            Course newCourse = new Course(0, courseName, courseCode, departmentId, credits, level);
+            String courseJson = gson.toJson(newCourse);
+            return Protocol_Constants.ADD_COURSE + courseJson;
+        } catch (Exception e) {
+            System.out.println("Error preparing course data: " + e.getMessage());
+            return null;
+        }
+    }
+
+    /**
+     //     //
+     //     //     * Author: Meghana Rathnam
+     //     //
+     //     //     * Date: 12-April 2024
+     //     //
+     //     //     */
+    public static String insertNewDepartmentOption() {
+        Scanner sc = new Scanner(System.in);
+        System.out.println("Enter department details:");
+
+        try {
+            System.out.print("Department Name: ");
+            String departmentName = sc.nextLine();
+
+            Department newDepartment = new Department(0, departmentName);
+            String departmentJson = gson.toJson(newDepartment);
+            return Protocol_Constants.ADD_DEPARTMENT + departmentJson;
+        } catch (Exception e) {
+            System.out.println("Error preparing department data: " + e.getMessage());
+            return null;
+        }
+    }
+    /**
+     //     //
+     //     //     * Author: Meghana Rathnam
+     //     //
+     //     //     * Date: 12-April 2024
+     //     //
+     //     //     */
+    public static String insertNewModuleOption() {
+        Scanner sc = new Scanner(System.in);
+        System.out.println("Enter module details:");
+
+        try {
+            System.out.print("Module Name: ");
+            String moduleName = sc.nextLine();
+
+            System.out.print("Credits: ");
+            int credits = sc.nextInt();
+
+            Module newModule = new Module(0, moduleName, credits);
+            String moduleJson = gson.toJson(newModule);
+            return Protocol_Constants.ADD_MODULE + moduleJson;
+        } catch (Exception e) {
+            System.out.println("Error preparing module data: " + e.getMessage());
+            return null;
+        }
+    }
 
 }
+
