@@ -14,5 +14,8 @@ public interface DepartmentDAOInterface
     Department insertNewDepartment(Department department) throws DaoException;
     void updateDepartmentById(Department department) throws DaoException;
 
+    int deleteDepartmentById(int id) throws DaoException;
+    public List<Department> findDepartmentUsingFilter(int credit) throws DaoException;
+
 }
 

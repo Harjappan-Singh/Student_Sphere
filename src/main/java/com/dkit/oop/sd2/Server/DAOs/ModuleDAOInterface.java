@@ -14,5 +14,8 @@ public interface ModuleDAOInterface
     Module insertNewModule(Module module) throws DaoException;
     void updateModuleById(Module module) throws DaoException;
 
+    int deleteModuleById(int id) throws DaoException;
+    public List<Module> findModuleUsingFilter(int credit) throws DaoException;
+
 }
 

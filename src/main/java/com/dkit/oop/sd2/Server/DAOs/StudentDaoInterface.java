@@ -12,9 +12,8 @@ public interface StudentDaoInterface
 
     public Student insertNewStudent(Student student) throws DaoException;
     public void updateStudentById(int id, Student student) throws DaoException;
-//    public int deleteStudentById(int id) throws DaoException;
-//
-//    public List<Student> findStudentUsingFilter(int age) throws DaoException;
+    public List<Student> findStudentUsingFilter(int age) throws DaoException;
+    public int deleteStudentById(int id) throws DaoException;
 
 }
 

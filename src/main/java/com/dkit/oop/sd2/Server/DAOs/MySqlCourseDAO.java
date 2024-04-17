@@ -209,4 +209,91 @@ public class MySqlCourseDAO extends MySqlDao implements CourseDAOInterface {
             }
         }
     }
+    /**
+     //
+     //     * Author: Conor Gilbert
+     //
+     //     * Date: 11-April 2024
+     //
+     //     */
+    @Override
+    public int deleteCourseById(int id) throws DaoException
+    {
+        Connection connection = null;
+        PreparedStatement preparedStatement = null;
+        int affectedRows;
+
+        try
+        {
+            connection = this.getConnection();
+            String query = "DELETE * FROM Course WHERE Course_id = ?";
+            preparedStatement = connection.prepareStatement(query);
+            preparedStatement.setInt(1, id);
+            affectedRows = preparedStatement.executeUpdate();
+            if (affectedRows == 0) {
+                throw new DaoException("Delete Course failed, no rows affected.");
+            }
+        } catch (SQLException e) {
+            throw new DaoException("deleteCourseByIdResultSet() " + e.getMessage()); } finally {
+            try {
+
+                if (preparedStatement != null) {
+                    preparedStatement.close();
+                }
+                if (connection != null) {
+                    freeConnection(connection);
+                }
+            } catch (SQLException e) {
+                throw new DaoException("deleteCourseById() " + e.getMessage());
+            }
+        }
+
+        return affectedRows;
+    }
+    /**
+     //
+     //     * Author: Conor Gilbert
+     //
+     //     * Date: 11-April 2024
+     //
+     //     */
+    @Override
+    public List<Course> findCourseUsingFilter(int credit) throws DaoException {
+        Connection connection = null;
+        PreparedStatement preparedStatement = null;
+        List<Course> filteredCourseList = new ArrayList<>();
+        ResultSet resultSet = null;
+        try {
+            connection = this.getConnection();
+            String query = "SELECT * FROM Courses WHERE credits = ?";
+            preparedStatement = connection.prepareStatement(query);
+            preparedStatement.setInt(1, credit);
+            resultSet = preparedStatement.executeQuery();
+            while (resultSet.next()) {
+                int courseID = resultSet.getInt("course_id");
+                String courseName = resultSet.getString("course_name");
+                String courseCode = resultSet.getString("course_code");
+                int departmentID = resultSet.getInt("department_id");
+                int credits = resultSet.getInt("credits");
+                String level = resultSet.getString("level");
+
+                Course c = new Course(courseID, courseName, courseCode, departmentID, credits, level);
+                filteredCourseList.add(c);
+            }
+        } catch (SQLException e) {
+            throw new DaoException("findCourseUsingFilter() " + e.getMessage());
+        } finally {
+            try {
+                if (preparedStatement != null) {
+                    preparedStatement.close();
+                }
+                if (connection != null) {
+                    freeConnection(connection);
+                }
+            } catch (SQLException e) {
+                throw new DaoException("findCourseUsingFilter() finally " + e.getMessage());
+            }
+        }
+        return filteredCourseList;
+    }
 }

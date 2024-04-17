@@ -142,52 +142,48 @@ public class MySqlStudentDao extends MySqlDao implements StudentDaoInterface{
         }
         return s;
     }
-//
-//    /**
-//
-//     * Author: Conor Gilbert
-//
-//     * Date: 7-Mar 2024
-//
-//     */
-//    @Override
-//    public int deleteStudentById(int id) throws DaoException
-//    {
-//        Connection connection = null;
-//        PreparedStatement preparedStatement = null;
-//        int affectedRows;
-//
-//        try
-//            {
-//                connection = this.getConnection();
-//                String query = "DELETE  FROM STUDENTS WHERE id = ?";
-//                preparedStatement = connection.prepareStatement(query);
-//                preparedStatement.setInt(1, id);
-//                affectedRows = preparedStatement.executeUpdate();
-//                if (affectedRows == 0) {
-//                    throw new DaoException("Delete student failed, no rows affected.");
-//                }
-//
-//        } catch (SQLException e) {
-//            throw new DaoException("deleteStudentByIdResultSet() " + e.getMessage());
-//        } finally {
-//                try {
-//
-//                    if (preparedStatement != null) {
-//                        preparedStatement.close();
-//                    }
-//                    if (connection != null) {
-//                        freeConnection(connection);
-//                    }
-//                } catch (SQLException e) {
-//                    throw new DaoException("deleteStudentById() " + e.getMessage());
-//                }
-//            }
-//
-//            return affectedRows;
-//        }
-//
-//
+
+    /**
+
+     * Author: Conor Gilbert
+
+     * Date: 7-Mar 2024
+
+     */
+    @Override
+    public int deleteStudentById(int id) throws DaoException
+    {
+        Connection connection = null;
+        PreparedStatement preparedStatement = null;
+        int affectedRows;
+        try
+        {
+            connection = this.getConnection();
+            String query = "DELETE * FROM STUDENTS WHERE id = ?";
+            preparedStatement = connection.prepareStatement(query);
+            preparedStatement.setInt(1, id);
+            affectedRows = preparedStatement.executeUpdate();
+            if (affectedRows == 0) {
+                throw new DaoException("Delete student failed, no rows affected.");
+            }
+        } catch (SQLException e) {
+            throw new DaoException("deleteStudentByIdResultSet() " + e.getMessage()); } finally {
+            try {
+
+                if (preparedStatement != null) {
+                    preparedStatement.close();
+                }
+                if (connection != null) {
+                    freeConnection(connection);
+                }
+            } catch (SQLException e) {
+                throw new DaoException("deleteStudentById() " + e.getMessage());
+            }
+        }
+
+        return affectedRows;
+    }
+
     /**
      * Author: Meghana Rathnam
      * Date: 7-Mar 2024
@@ -302,55 +298,52 @@ public class MySqlStudentDao extends MySqlDao implements StudentDaoInterface{
             }
         }
     }
-//    /**
-//     * Author: Conor Gilbert
-//     * Date: 15-Mar 2024
-//     */
-//    @Override
-//    public List<Student> findStudentUsingFilter(int age) throws DaoException {
-//        Connection connection = null;
-//        PreparedStatement preparedStatement = null;
-//        List<Student> filteredStudentList = new ArrayList<>();
-//        ResultSet resultSet = null;
-//        try {
-//            connection = this.getConnection();
-//            String query = "SELECT * FROM STUDENTS WHERE TIMESTAMPDIFF(YEAR, birth_date, CURDATE()) = ?";
-//            preparedStatement = connection.prepareStatement(query);
-//            preparedStatement = connection.prepareStatement(query);
-//            preparedStatement.setInt(1, age);
-//            resultSet = preparedStatement.executeQuery();
-//            while (resultSet.next()) {
-//                int id = resultSet.getInt("id");
-//                String firstName = resultSet.getString("first_name");
-//                String lastName = resultSet.getString("last_name");
-//                Date birthDate = resultSet.getDate("birth_date");
-//                String studentEmail = resultSet.getString("student_email");
-//                String studentPhone = resultSet.getString("student_phone");
-//                String address = resultSet.getString("address");
-//                String courseFullName = resultSet.getString("course_full_name");
-//                String courseStatus = resultSet.getString("course_status");
-//                boolean hasPaidFullFee = resultSet.getBoolean("has_paid_full_fee");
-//                String classGroup = resultSet.getString("class_group");
-//                int graduationYear = resultSet.getInt("graduation_year");
-//                double currentGPA = resultSet.getInt("current_gpa");
-//
-//                Student s = new Student(id, firstName, lastName, birthDate, studentEmail, studentPhone, address, courseFullName, courseStatus, hasPaidFullFee, classGroup, graduationYear, currentGPA);
-//                filteredStudentList.add(s);
-//            }
-//        } catch (SQLException e) {
-//            throw new DaoException("findStudentUsingFilter() " + e.getMessage());
-//        } finally {
-//            try {
-//                if (preparedStatement != null) {
-//                    preparedStatement.close();
-//                }
-//                if (connection != null) {
-//                    freeConnection(connection);
-//                }
-//            } catch (SQLException e) {
-//                throw new DaoException("findStudentUsingFilter() finally " + e.getMessage());
-//            }
-//        }
-//        return filteredStudentList;
-//    }
+    /**
+     * Author: Conor Gilbert
+     * Date: 15-Mar 2024
+     */
+    @Override
+    public List<Student> findStudentUsingFilter(int age) throws DaoException {
+        Connection connection = null;
+        PreparedStatement preparedStatement = null;
+        List<Student> filteredStudentList = new ArrayList<>();
+        ResultSet resultSet = null;
+        try {
+            connection = this.getConnection();
+            String query = "SELECT * FROM STUDENTS WHERE TIMESTAMPDIFF(YEAR, birth_date, CURDATE()) = ?";
+            preparedStatement = connection.prepareStatement(query);
+            preparedStatement.setInt(1, age);
+            resultSet = preparedStatement.executeQuery();
+            while (resultSet.next()) {
+                int id = resultSet.getInt("id");
+                String firstName = resultSet.getString("first_name");
+                String lastName = resultSet.getString("last_name");
+                Date birthDate = resultSet.getDate("birth_date");
+                String studentEmail = resultSet.getString("student_email");
+                String studentPhone = resultSet.getString("student_phone");
+                String address = resultSet.getString("address");
+                boolean hasPaidFullFee = resultSet.getBoolean("has_paid_full_fee");
+                int graduationYear = resultSet.getInt("graduation_year");
+                double currentGPA = resultSet.getInt("current_gpa");
+                int courseId = resultSet.getInt("course_id");
+
+                Student s = new Student(id, firstName,lastName, birthDate, studentEmail, studentPhone, address, graduationYear,hasPaidFullFee, currentGPA, courseId);
+                filteredStudentList.add(s);
+            }
+        } catch (SQLException e) {
+            throw new DaoException("findStudentUsingFilter() " + e.getMessage());
+        } finally {
+            try {
+                if (preparedStatement != null) {
+                    preparedStatement.close();
+                }
+                if (connection != null) {
+                    freeConnection(connection);
+                }
+            } catch (SQLException e) {
+                throw new DaoException("findStudentUsingFilter() finally " + e.getMessage());
+            }
+        }
+        return filteredStudentList;
+    }
 }

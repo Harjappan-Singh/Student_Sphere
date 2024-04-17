@@ -192,4 +192,89 @@ public class MySqlModuleDAO extends MySqlDao implements ModuleDAOInterface {
             throw new DaoException("updateModuleById() " + e.getMessage());
         }
     }
+
+    /**
+     //
+     //     * Author: Conor Gilbert
+     //
+     //     * Date: 11-April 2024
+     //
+     //     */
+    @Override
+    public int deleteModuleById(int id) throws DaoException
+    {
+        Connection connection = null;
+        PreparedStatement preparedStatement = null;
+        int affectedRows;
+
+        try
+        {
+            connection = this.getConnection();
+            String query = "DELETE * FROM Modules WHERE module_id = ?";
+            preparedStatement = connection.prepareStatement(query);
+            preparedStatement.setInt(1, id);
+            affectedRows = preparedStatement.executeUpdate();
+            if (affectedRows == 0) {
+                throw new DaoException("Delete module failed, no rows affected.");
+            }
+        } catch (SQLException e) {
+            throw new DaoException("deleteModuleByIdResultSet() " + e.getMessage()); } finally {
+            try {
+
+                if (preparedStatement != null) {
+                    preparedStatement.close();
+                }
+                if (connection != null) {
+                    freeConnection(connection);
+                }
+            } catch (SQLException e) {
+                throw new DaoException("deleteModuleById() " + e.getMessage());
+            }
+        }
+
+        return affectedRows;
+    }
+    /**
+     //
+     //     * Author: Conor Gilbert
+     //
+     //     * Date: 11-April 2024
+     //
+     //     */
+    @Override
+    public List<Module> findModuleUsingFilter(int credit) throws DaoException {
+        Connection connection = null;
+        PreparedStatement preparedStatement = null;
+        List<Module> filteredModuleList = new ArrayList<>();
+        ResultSet resultSet = null;
+        try {
+            connection = this.getConnection();
+            String query = "SELECT * FROM MODULES WHERE credits = ?";
+            preparedStatement = connection.prepareStatement(query);
+            preparedStatement.setInt(1, credit);
+            resultSet = preparedStatement.executeQuery();
+            while (resultSet.next()) {
+                int moduleID = resultSet.getInt("module_id");
+                String moduleName = resultSet.getString("module_name");
+                int credits = resultSet.getInt("credits");
+
+                Module m = new Module(moduleID, moduleName, credits);
+                filteredModuleList.add(m);
+            }
+        } catch (SQLException e) {
+            throw new DaoException("findModuleUsingFilter() " + e.getMessage());
+        } finally {
+            try {
+                if (preparedStatement != null) {
+                    preparedStatement.close();
+                }
+                if (connection != null) {
+                    freeConnection(connection);
+                }
+            } catch (SQLException e) {
+                throw new DaoException("findModuleUsingFilter() finally " + e.getMessage());
+            }
+        }
+        return filteredModuleList;
+    }
 }

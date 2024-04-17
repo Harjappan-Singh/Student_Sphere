@@ -15,5 +15,8 @@ public interface CourseDAOInterface
 
     void updateCourseById(Course course) throws DaoException;
 
+    int deleteCourseById(int id) throws DaoException;
+    public List<Course> findCourseUsingFilter(int credit) throws DaoException;
+
 }
 

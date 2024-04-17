@@ -185,4 +185,88 @@ public class MySqlDepartmentDAO extends MySqlDao implements DepartmentDAOInterfa
             throw new DaoException("updateDepartmentById() " + e.getMessage());
         }
     }
+
+    /**
+     //
+     //     * Author: Conor Gilbert
+     //
+     //     * Date: 11-April 2024
+     //
+     //     */
+    @Override
+    public int deleteDepartmentById(int id) throws DaoException
+    {
+        Connection connection = null;
+        PreparedStatement preparedStatement = null;
+        int affectedRows;
+
+        try
+        {
+            connection = this.getConnection();
+            String query = "DELETE * FROM Department WHERE Department_id = ?";
+            preparedStatement = connection.prepareStatement(query);
+            preparedStatement.setInt(1, id);
+            affectedRows = preparedStatement.executeUpdate();
+            if (affectedRows == 0) {
+                throw new DaoException("Delete Department failed, no rows affected.");
+            }
+        } catch (SQLException e) {
+            throw new DaoException("deleteDepartmentByIdResultSet() " + e.getMessage()); } finally {
+            try {
+
+                if (preparedStatement != null) {
+                    preparedStatement.close();
+                }
+                if (connection != null) {
+                    freeConnection(connection);
+                }
+            } catch (SQLException e) {
+                throw new DaoException("deleteDepartmentById() " + e.getMessage());
+            }
+        }
+
+        return affectedRows;
+    }
+    /**
+     //
+     //     * Author: Conor Gilbert
+     //
+     //     * Date: 11-April 2024
+     //
+     //     */
+    @Override
+    public List<Department> findDepartmentUsingFilter(int credit) throws DaoException {
+        Connection connection = null;
+        PreparedStatement preparedStatement = null;
+        List<Department> filteredDepartmentList = new ArrayList<>();
+        ResultSet resultSet = null;
+        try {
+            connection = this.getConnection();
+            String query = "SELECT * FROM DEPARTMENTS WHERE credits = ?";
+            preparedStatement = connection.prepareStatement(query);
+            preparedStatement.setInt(1, credit);
+            resultSet = preparedStatement.executeQuery();
+            while (resultSet.next()) {
+                int departmentID = resultSet.getInt("department_id");
+                String departmentName = resultSet.getString("department_name");
+
+                Department d = new Department(departmentID, departmentName);
+                filteredDepartmentList.add(d);
+            }
+        } catch (SQLException e) {
+            throw new DaoException("findDepartmentUsingFilter() " + e.getMessage());
+        } finally {
+            try {
+                if (preparedStatement != null) {
+                    preparedStatement.close();
+                }
+                if (connection != null) {
+                    freeConnection(connection);
+                }
+            } catch (SQLException e) {
+                throw new DaoException("findDepartmentUsingFilter() finally " + e.getMessage());
+            }
+        }
+        return filteredDepartmentList;
+    }
 }
