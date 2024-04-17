@@ -138,6 +138,45 @@ public class Client {
                         } else {
                             System.out.println("Server response: " + response);
                         }
+                    }else if (userRequest.startsWith(Protocol_Constants.DISPLAY_ALL_STUDENTS)) {
+                        String userString = in.readLine();
+                        System.out.println("----Client message: Response from server after \"Display All Students\" request----");
+                        Gson gsonParser = new Gson();
+
+                        Student[] students = gsonParser.fromJson(userString, Student[].class);
+                        for (Student student : students) {
+                            System.out.println(student);
+                        }
+                    }
+                    else if (userRequest.startsWith(Protocol_Constants.DISPLAY_ALL_COURSES)) {
+                        String userString = in.readLine();
+                        System.out.println("----Client message: Response from server after \"Display All Courses\" request----");
+                        Gson gsonParser = new Gson();
+                        Course[] courses = gsonParser.fromJson(userString, Course[].class);
+
+                        for (Course course : courses) {
+                            System.out.println(course);
+                        }
+                    }
+                    else if (userRequest.startsWith(Protocol_Constants.DISPLAY_ALL_DEPARTMENTS)) {
+                        String userString = in.readLine();
+                        System.out.println("----Client message: Response from server after \"Display All Departments\" request----");
+                        Gson gsonParser = new Gson();
+                        Department[] departments = gsonParser.fromJson(userString, Department[].class);
+
+                        for (Department department : departments) {
+                            System.out.println(department);
+                        }
+                    }
+                    else if (userRequest.startsWith(Protocol_Constants.DISPLAY_ALL_MODULES)) {
+                        String userString = in.readLine();
+                        System.out.println("----Client message: Response from server after \"Display All Modules\" request----");
+                        Gson gsonParser = new Gson();
+
+                        Module[] modules = gsonParser.fromJson(userString, Module[].class);
+                        for (Module module : modules) {
+                            System.out.println(module);
+                        }
                     }
                     else if (userRequest.startsWith("quit")) // if the user has entered the "quit" command
                 {
@@ -170,7 +209,7 @@ public class Client {
         String query ="";
 
         do {
-//            System.out.println("1. Display options");
+            System.out.println("1. Display options");
             System.out.println("2. Display by unique id options");
 //            System.out.println("3. Delete student by an id");
             System.out.println("4. Add new entity");
@@ -185,8 +224,8 @@ public class Client {
 
             switch (userInput){
                 case 1:
-//                    displayOption();
-                    break;
+                    query=  displayAllOptions();
+                    return query;
                 case 2:
                     query = displayByIDOption();
                     return query;
@@ -480,6 +519,59 @@ public class Client {
             return null;
         }
     }
+    public static String displayAllStudents()
+    {
 
+        return Protocol_Constants.DISPLAY_ALL_STUDENTS;
+    }
+
+    public static String displayAllOptions(){
+        int userInput = 0;
+        String query ="";
+
+        do {
+            System.out.println("1. Display all students");
+            System.out.println("2. Display all courses");
+            System.out.println("3. Display all departments");
+            System.out.println("4. Display all modules");
+            System.out.println("5. Back");
+
+            Scanner sc = new Scanner(System.in);
+            userInput = sc.nextInt();
+            System.out.println(userInput);
+            switch (userInput) {
+                case 1:
+                    query = displayAllStudents();
+                    return query;
+                case 2:
+                    query = displayAllCourses();
+                    return query;
+                case 3:
+                    query = displayAllDepartments();
+                    return query;
+                case 4:
+                    query = displayAllModules();
+                    return query;
+                case 5:
+                    break;
+                default:
+                    System.out.println("Enter a valid option");
+            }
+
+        } while (userInput !=5);
+        return query;
+    }
+    public static String displayAllCourses()
+    {
+        return Protocol_Constants.DISPLAY_ALL_COURSES;
+    }
+    public static String displayAllDepartments()
+    {
+        return Protocol_Constants.DISPLAY_ALL_DEPARTMENTS;
+    }
+    public static String displayAllModules()
+    {
+        return Protocol_Constants.DISPLAY_ALL_MODULES;
+    }
 }
 

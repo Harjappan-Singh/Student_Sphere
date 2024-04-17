@@ -10,4 +10,9 @@ public class Protocol_Constants {
     public static final String ADD_DEPARTMENT ="ADD_DEPARTMENT";
     public static final String ADD_MODULE ="ADD_MODULE";
 
+    public static final String DISPLAY_ALL_STUDENTS= "DISPLAY_ALL_STUDENTS";
+    public static final String DISPLAY_ALL_COURSES ="DISPLAY_ALL_COURSES";
+    public static final String DISPLAY_ALL_DEPARTMENTS ="DISPLAY_ALL_DEPARTMENTS";
+    public static final String DISPLAY_ALL_MODULES ="DISPLAY_ALL_MODULES";
+
 }

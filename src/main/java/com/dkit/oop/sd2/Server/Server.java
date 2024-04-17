@@ -16,8 +16,7 @@ import java.io.PrintWriter;
 import java.net.ServerSocket;
 import java.net.Socket;
 import com.google.gson.Gson;
-
-
+import java.util.List;
 
 
 public class Server {
@@ -277,6 +276,108 @@ class ClientHandler implements Runnable
                             socketWriter.println(errorJson);
                         }
                     }
+                    else if (request.startsWith(Protocol_Constants.DISPLAY_ALL_STUDENTS))
+                    {
+                        try
+                        {
+
+                            StudentDaoInterface IStudentDao = new MySqlStudentDao();
+                            List<Student> students = IStudentDao.findAllStudents();
+                            if (students.isEmpty())
+                            {
+                                socketWriter.println("There are no students");
+                            }
+                            else
+                            {
+                                String studentListJSON = JSONConverter.studentsListToJson(students);
+
+
+                                //System.out.println("JSON Response: " + studentListJSON);
+
+                                socketWriter.println(studentListJSON);
+                            }
+                        }
+
+                        catch (DaoException e)
+                        {
+                            e.printStackTrace();
+                            socketWriter.println("Error retrieving students");
+                        }
+                    }
+                    else if (request.startsWith(Protocol_Constants.DISPLAY_ALL_COURSES))
+                    {
+                        try
+                        {
+                            CourseDAOInterface ICourseDao = new MySqlCourseDAO();
+
+                            List<Course> courses = ICourseDao.findAllCourses();
+                            if (courses.isEmpty())
+                            {
+                                socketWriter.println("There are no students");
+                            }
+                            else
+                            {
+                                String courseListJSON = JSONConverter.coursesListToJson(courses);
+
+
+
+
+                                socketWriter.println(courseListJSON);
+                            }
+                        }
+                        catch (DaoException e)
+                        {
+                            e.printStackTrace();
+                            socketWriter.println("Error retrieving courses");
+                        }}
+                    else if (request.startsWith(Protocol_Constants.DISPLAY_ALL_DEPARTMENTS))
+                    {
+                        try
+                        {
+                            DepartmentDAOInterface IDepartmentDao =new MySqlDepartmentDAO();
+
+                            List<Department> departments = IDepartmentDao.findAllDepartments();
+                            if (departments.isEmpty())
+                            {
+                                socketWriter.println("There are no departments");
+                            }
+                            else
+                            {
+                                String departmentListJSON = JSONConverter.departmentsListToJson(departments);
+
+
+
+
+                                socketWriter.println(departmentListJSON);
+                            }
+                        }
+                        catch (DaoException e)
+                        {
+                            e.printStackTrace();
+                            socketWriter.println("Error retrieving departments");
+                        }}
+                    else if (request.startsWith(Protocol_Constants.DISPLAY_ALL_MODULES)) {
+                        try
+                        {
+                            ModuleDAOInterface IModuleDao = new MySqlModuleDAO();
+
+                            List<Module> modules = IModuleDao.findAllModules();
+                            if (modules.isEmpty())
+                            {
+                                socketWriter.println("There are no modules");
+                            }
+                            else
+                            {
+                                String moduleListJSON = JSONConverter.modulesListToJson(modules);
+
+                                socketWriter.println(moduleListJSON);
+                            }
+                        }
+                        catch (DaoException e)
+                        {
+                            e.printStackTrace();
+                            socketWriter.println("Error retrieving modules");
+                        }}
                  else if (request.startsWith("quit"))
                 {
                     socketWriter.println("Sorry to see you leaving. Goodbye.");

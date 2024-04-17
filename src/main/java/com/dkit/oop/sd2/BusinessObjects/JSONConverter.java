@@ -76,4 +76,26 @@ public class JSONConverter {
         return studentListJson;
 
     }
+
+    public static String departmentsListToJson( List<Department> list ){
+        Gson gsonParser = new Gson();
+        String departmentsListJson =  gsonParser.toJson(list);
+//
+        return departmentsListJson;
+
+    }
+    public static String coursesListToJson( List<Course> list ){
+        Gson gsonParser = new Gson();
+        String coursesListJson =  gsonParser.toJson(list);
+//
+        return coursesListJson;
+
+    }
+    public static String modulesListToJson( List<Module> list ){
+        Gson gsonParser = new Gson();
+        String modulesListJson =  gsonParser.toJson(list);
+//
+        return modulesListJson;
+
+    }
 }
