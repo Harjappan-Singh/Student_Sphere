@@ -9,13 +9,15 @@ import com.dkit.oop.sd2.Server.DTOs.Module;
 import com.dkit.oop.sd2.Server.DTOs.Student;
 import com.dkit.oop.sd2.Server.Exceptions.DaoException;
 
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStreamReader;
-import java.io.PrintWriter;
+import java.io.*;
 import java.net.ServerSocket;
 import java.net.Socket;
 import com.google.gson.Gson;
+
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.util.Arrays;
 import java.util.List;
 
 
@@ -82,6 +84,11 @@ class ClientHandler implements Runnable
     PrintWriter socketWriter;
     Socket clientSocket;
     final int clientNumber;
+
+    private static DataOutputStream dataOutputStream = null;
+    private static DataInputStream dataInputStream = null;
+
+    private static String[] imgList = null;
 
     // Constructor
     public ClientHandler(Socket clientSocket, int clientNumber) {
@@ -377,8 +384,35 @@ class ClientHandler implements Runnable
                         {
                             e.printStackTrace();
                             socketWriter.println("Error retrieving modules");
-                        }}
-                 else if (request.startsWith("quit"))
+                        }} else if (request.startsWith(Protocol_Constants.GET_ALL_IMAGES)) {
+
+                        try {
+                            imgList = Files.list(Paths.get("src/main/java/com/dkit/oop/sd2/Server/StudentImages/"))
+                                    .filter(Files::isRegularFile)
+                                    .map(Path::getFileName)
+                                    .map(Path::toString)
+                                    .toArray(String[]::new);
+                            String imagesList = JSONConverter.imageListToJson(imgList);
+                            socketWriter.println(imagesList);
+                        } catch (IOException e) {
+                            e.printStackTrace();
+                        }
+                    } else if (request.startsWith("GET_IMG_")) {
+                        int imgIndex = Integer.parseInt(request.substring(8));
+                        dataInputStream = new DataInputStream(clientSocket.getInputStream());
+                        dataOutputStream = new DataOutputStream( clientSocket.getOutputStream());
+
+//                        imgList[imgIndex];
+                        System.out.println("Sending the File to the Client");
+                        // Call SendFile Method
+                        try{
+                            sendFile("src/main/java/com/dkit/oop/sd2/Server/StudentImages/"+imgList[imgIndex]);   // hardcode location for convenience
+                        } catch (Exception e){
+                            e.printStackTrace();
+                        }
+                        dataInputStream.close();
+                        dataInputStream.close();
+                    } else if (request.startsWith("quit"))
                 {
                     socketWriter.println("Sorry to see you leaving. Goodbye.");
                     System.out.println("Server message: Client has notified us that it is quitting.");
@@ -389,7 +423,9 @@ class ClientHandler implements Runnable
                 }
             }
         } catch (IOException ex) {
-            ex.printStackTrace();
+//            ex.printStackTrace();
+            System.out.println("Client might have disconeected");
+
         } finally {
             this.socketWriter.close();
             try {
@@ -400,5 +436,30 @@ class ClientHandler implements Runnable
             }
         }
         System.out.println("Server: (ClientHandler): Handler for Client " + clientNumber + " is terminating .....");
+    }
+
+    /**
+     //
+     //     * Author: Harjappan Singh
+     //
+     //     * Date: 17-April 2024
+     //
+     //     */
+    private static void sendFile(String path)
+            throws Exception
+    {
+        int bytes = 0;
+        File file = new File(path);
+        FileInputStream fileInputStream = new FileInputStream(file);
+
+        dataOutputStream.writeLong(file.length());
+
+        byte[] buffer = new byte[4 * 1024]; // 4 kilobyte buffer
+
+        while ((bytes = fileInputStream.read(buffer))!= -1) {
+            dataOutputStream.write(buffer, 0, bytes);
+            dataOutputStream.flush();   // force the data into the stream
+        }
+        fileInputStream.close();
     }
 }

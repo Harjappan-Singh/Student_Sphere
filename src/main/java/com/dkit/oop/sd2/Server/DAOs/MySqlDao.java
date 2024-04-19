@@ -11,7 +11,7 @@ public class MySqlDao
         String driver = "com.mysql.cj.jdbc.Driver";
         String url = "jdbc:mysql://localhost:3306/student_sphere";
         String username = "root";
-        String password = "Guglu@2002";
+        String password = "";
         Connection connection = null;
 
         try

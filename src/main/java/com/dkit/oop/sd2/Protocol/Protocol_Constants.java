@@ -14,5 +14,6 @@ public class Protocol_Constants {
     public static final String DISPLAY_ALL_COURSES ="DISPLAY_ALL_COURSES";
     public static final String DISPLAY_ALL_DEPARTMENTS ="DISPLAY_ALL_DEPARTMENTS";
     public static final String DISPLAY_ALL_MODULES ="DISPLAY_ALL_MODULES";
+    public static final String GET_ALL_IMAGES = "GET_ALL_IMAGES";
 
 }

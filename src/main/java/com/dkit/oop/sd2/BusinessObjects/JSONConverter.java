@@ -98,4 +98,17 @@ public class JSONConverter {
         return modulesListJson;
 
     }
+
+    /**
+
+     * Author: Harjappan Singh
+
+     * Date: 17-April 2024
+
+     */
+    public  static String imageListToJson(String[] imageList){
+        Gson gsonParser = new Gson();
+        String imageListJson = gsonParser.toJson(imageList);
+        return imageListJson;
+    }
 }
