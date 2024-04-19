@@ -9,12 +9,10 @@ import com.dkit.oop.sd2.Server.DTOs.Student;
 import com.dkit.oop.sd2.Server.Exceptions.DaoException;
 import com.google.gson.Gson;
 
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStreamReader;
-import java.io.PrintWriter;
+import java.io.*;
 import java.net.Socket;
 import java.sql.Date;
+import java.util.Arrays;
 import java.util.Scanner;
 
 /**
@@ -26,6 +24,11 @@ import java.util.Scanner;
  //     */
 public class Client {
     private static Gson gson = new Gson();
+
+    private static DataOutputStream dataOutputStream = null;
+    private static DataInputStream dataInputStream = null;
+
+    private static String[] imageList = null;
     public static void main(String[] args) {
         Client client = new Client();
         client.start();
@@ -177,8 +180,34 @@ public class Client {
                         for (Module module : modules) {
                             System.out.println(module);
                         }
-                    }
-                    else if (userRequest.startsWith("quit")) // if the user has entered the "quit" command
+
+                        /**
+                         //
+                         //     * Author: Harjappan Singh
+                         //
+                         //     * Date: 17-April 2024
+                         //
+                         //     */
+                    } else if (userRequest.startsWith(Protocol_Constants.GET_ALL_IMAGES)) {
+                        String userString = in.readLine();
+                        System.out.println("----Client message: Response from server after \"Get all Images\" request----");
+                        Gson gsonParser = new Gson();
+                        imageList = gsonParser.fromJson(userString, String[].class);
+                        System.out.println(Arrays.toString(imageList));
+                        System.out.println("Enter the img index you want to download: ");
+                        Scanner sc = new Scanner(System.in);
+                        int imgIndex = sc.nextInt();
+                        out.println("GET_IMG_"+ imgIndex);
+                        dataInputStream = new DataInputStream(socket.getInputStream());
+                        dataOutputStream = new DataOutputStream( socket.getOutputStream());
+                        try{
+                            receiveFile("src/main/java/com/dkit/oop/sd2/Client/StudentImages/"+imageList[imgIndex]);
+                        } catch (Exception e){
+                            e.printStackTrace();
+                        }
+                        dataInputStream.close();
+                        dataOutputStream.close();
+                    } else if (userRequest.startsWith("quit")) // if the user has entered the "quit" command
                 {
                     String response = in.readLine();   // wait for response -
                     System.out.println("Client message: Response from server: \"" + response + "\"");
@@ -215,6 +244,7 @@ public class Client {
             System.out.println("4. Add new entity");
 //            System.out.println("5. Update Options");
 //            System.out.println("6. Filter students by their age");
+            System.out.println("6. Get all images.");
             System.out.println("7. Exit");
             System.out.print("Choose an option: ");
 
@@ -240,7 +270,8 @@ public class Client {
                     break;
                 case 6:
 //                    findStudentUsingFilterOption();
-                    break;
+                    query = Protocol_Constants.GET_ALL_IMAGES;
+                    return query;
                 case 7:
                     query = "quit";
                     break;
@@ -572,6 +603,35 @@ public class Client {
     public static String displayAllModules()
     {
         return Protocol_Constants.DISPLAY_ALL_MODULES;
+    }
+
+    /**
+     //
+     //     * Author: Harjappan Singh
+     //
+     //     * Date: 17-April 2024
+     //
+     //     */
+    private static void receiveFile(String fileName)
+            throws Exception
+    {
+        int bytes = 0;
+        FileOutputStream fileOutputStream = new FileOutputStream(fileName);
+
+        long size = dataInputStream.readLong();
+
+        byte[] buffer = new byte[4 * 1024];         // 4 kilobyte buffer
+
+        while (size > 0 &&
+                (bytes = dataInputStream.read(buffer, 0,(int)Math.min(buffer.length, size))) != -1) {
+            fileOutputStream.write(buffer, 0, bytes);
+            size = size - bytes;
+        }
+
+        System.out.println("File is Received");
+
+        System.out.println("Look in the StudentImages folder to see the transferred file");
+        fileOutputStream.close();
     }
 }
 
