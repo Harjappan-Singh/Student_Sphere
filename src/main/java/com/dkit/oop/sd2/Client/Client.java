@@ -17,8 +17,8 @@ import java.util.Scanner;
 
 /**
  //
- //     * Author: Harjappan Singh
- //
+ //     * Main Author: Harjappan Singh
+ //     * Contributors: Meghana Rathnam , Conor Gilbert
  //     * Date: 10-April 2024
  //
  //     */
@@ -207,7 +207,32 @@ public class Client {
                         }
                         dataInputStream.close();
                         dataOutputStream.close();
-                    } else if (userRequest.startsWith("quit")) // if the user has entered the "quit" command
+                    }
+                    else if (userRequest.startsWith(Protocol_Constants.DELETE_STUDENT_BY_ID)) {
+                        String response = in.readLine();
+                        System.out.println("----Client message: Response from server after \"Delete Student\" request----");
+                        String message = response.substring(response.indexOf("\"message\":\"") + 10, response.lastIndexOf("\""));
+                        System.out.println(message);
+                    }
+                    else if (userRequest.startsWith(Protocol_Constants.DELETE_COURSE_BY_ID)) {
+                        String response = in.readLine();
+                        System.out.println("----Client message: Response from server after \"Delete Course\" request----");
+                        String message = response.substring(response.indexOf("\"message\":\"") + 10, response.lastIndexOf("\""));
+                        System.out.println(message);
+                    }
+                    else if (userRequest.startsWith(Protocol_Constants.DELETE_DEPARTMENT_BY_ID)) {
+                        String response = in.readLine();
+                        System.out.println("----Client message: Response from server after \"Delete Department\" request----");
+                        String message = response.substring(response.indexOf("\"message\":\"") + 10, response.lastIndexOf("\""));
+                        System.out.println(message);
+                    }
+                    else if (userRequest.startsWith(Protocol_Constants.DELETE_MODULE_BY_ID)) {
+                        String response = in.readLine();
+                        System.out.println("----Client message: Response from server after \"Delete Module\" request----");
+                        String message = response.substring(response.indexOf("\"message\":\"") + 10, response.lastIndexOf("\""));
+                        System.out.println(message);
+                    }
+                    else if (userRequest.startsWith("quit")) // if the user has entered the "quit" command
                 {
                     String response = in.readLine();   // wait for response -
                     System.out.println("Client message: Response from server: \"" + response + "\"");
@@ -238,14 +263,12 @@ public class Client {
         String query ="";
 
         do {
-            System.out.println("1. Display options");
-            System.out.println("2. Display by unique id options");
-//            System.out.println("3. Delete student by an id");
-            System.out.println("4. Add new entity");
-//            System.out.println("5. Update Options");
-//            System.out.println("6. Filter students by their age");
-            System.out.println("6. Get all images.");
-            System.out.println("7. Exit");
+            System.out.println("1. Display by unique id options");
+            System.out.println("2. Display options");
+            System.out.println("3. Add new entity");
+            System.out.println("4. Delete entity id");
+            System.out.println("5. Get all images.");
+            System.out.println("6. Exit");
             System.out.print("Choose an option: ");
 
             Scanner sc = new Scanner(System.in);
@@ -254,25 +277,21 @@ public class Client {
 
             switch (userInput){
                 case 1:
-                    query=  displayAllOptions();
-                    return query;
-                case 2:
                     query = displayByIDOption();
                     return query;
+                case 2:
+                    query= displayAllOptions();
+                    return query;
                 case 3:
-//                    deleteByIdOption();
-                    break;
-                case 4:
                     query = addEntityOptions();
                     return query;
+                case 4:
+                    query = deleteEntityOptions();
+                    return query;
                 case 5:
-//                    updateOptions();
-                    break;
-                case 6:
-//                    findStudentUsingFilterOption();
                     query = Protocol_Constants.GET_ALL_IMAGES;
                     return query;
-                case 7:
+                case 6:
                     query = "quit";
                     break;
                 default:
@@ -633,5 +652,48 @@ public class Client {
         System.out.println("Look in the StudentImages folder to see the transferred file");
         fileOutputStream.close();
     }
+
+    /**
+     //     //
+     //     //     * Author: Meghana Rathnam
+     //     //
+     //     //     * Date: 20-April 2024
+     //     //
+     //     //     */
+    public static String deleteEntityOptions() {
+        Scanner sc = new Scanner(System.in);
+        System.out.println("Choose an entity to delete:");
+        System.out.println("1. Student");
+        System.out.println("2. Course");
+        System.out.println("3. Department");
+        System.out.println("4. Module");
+        System.out.println("5. Back");
+        System.out.print("Enter your choice: ");
+        int choice = sc.nextInt();
+
+        switch (choice) {
+            case 1:
+                return deleteEntityById(Protocol_Constants.DELETE_STUDENT_BY_ID);
+            case 2:
+                return deleteEntityById(Protocol_Constants.DELETE_COURSE_BY_ID);
+            case 3:
+                return deleteEntityById(Protocol_Constants.DELETE_DEPARTMENT_BY_ID);
+            case 4:
+                return deleteEntityById(Protocol_Constants.DELETE_MODULE_BY_ID);
+            case 5:
+                return "back";
+            default:
+                System.out.println("Invalid choice. Please try again.");
+                return "";
+        }
+    }
+
+    private static String deleteEntityById(String protocolConstant) {
+        Scanner sc = new Scanner(System.in);
+        System.out.print("Enter the ID of the entity to delete: ");
+        int id = sc.nextInt();
+        return protocolConstant + " " + id;
+    }
 }
+
 

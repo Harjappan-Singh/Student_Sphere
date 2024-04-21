@@ -159,7 +159,7 @@ public class MySqlStudentDao extends MySqlDao implements StudentDaoInterface{
         try
         {
             connection = this.getConnection();
-            String query = "DELETE * FROM STUDENTS WHERE id = ?";
+            String query = "DELETE FROM STUDENTS WHERE id = ?";
             preparedStatement = connection.prepareStatement(query);
             preparedStatement.setInt(1, id);
             affectedRows = preparedStatement.executeUpdate();

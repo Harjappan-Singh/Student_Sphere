@@ -210,7 +210,7 @@ public class MySqlModuleDAO extends MySqlDao implements ModuleDAOInterface {
         try
         {
             connection = this.getConnection();
-            String query = "DELETE * FROM Modules WHERE module_id = ?";
+            String query = "DELETE FROM Modules WHERE module_id = ?";
             preparedStatement = connection.prepareStatement(query);
             preparedStatement.setInt(1, id);
             affectedRows = preparedStatement.executeUpdate();

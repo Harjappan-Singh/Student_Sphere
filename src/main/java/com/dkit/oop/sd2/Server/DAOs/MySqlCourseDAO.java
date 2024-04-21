@@ -226,7 +226,7 @@ public class MySqlCourseDAO extends MySqlDao implements CourseDAOInterface {
         try
         {
             connection = this.getConnection();
-            String query = "DELETE * FROM Course WHERE Course_id = ?";
+            String query = "DELETE FROM Courses WHERE course_id = ?";
             preparedStatement = connection.prepareStatement(query);
             preparedStatement.setInt(1, id);
             affectedRows = preparedStatement.executeUpdate();

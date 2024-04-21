@@ -16,4 +16,9 @@ public class Protocol_Constants {
     public static final String DISPLAY_ALL_MODULES ="DISPLAY_ALL_MODULES";
     public static final String GET_ALL_IMAGES = "GET_ALL_IMAGES";
 
+    public static final String DELETE_STUDENT_BY_ID= "DELETE_STUDENT_BY_ID";
+    public static final String DELETE_COURSE_BY_ID ="DELETE_COURSE_BY_ID";
+    public static final String DELETE_DEPARTMENT_BY_ID ="DELETE_DEPARTMENT_BY_ID";
+    public static final String DELETE_MODULE_BY_ID ="DELETE_MODULE_BY_ID";
+
 }

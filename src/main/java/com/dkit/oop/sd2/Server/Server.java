@@ -114,310 +114,280 @@ class ClientHandler implements Runnable
                 System.out.println("Server: (ClientHandler): Read command from client " + clientNumber + ": " + request);
 
                 // Implementation our PROTOCOL
-                    if (request.startsWith(Protocol_Constants.DISPLAY_STUDENT_BY_ID))
-                    {
-                        try
-                        {
-                            StudentDaoInterface IStudentDao = new MySqlStudentDao();
-                            int id;
-                            id = Integer.valueOf(request.substring(21));
-                            Student student = IStudentDao.findStudentById(id);
+                StudentDaoInterface studentDao = null;
+                if (request.startsWith(Protocol_Constants.DISPLAY_STUDENT_BY_ID)) {
+                    try {
+                        StudentDaoInterface IStudentDao = new MySqlStudentDao();
+                        int id;
+                        id = Integer.valueOf(request.substring(21));
+                        Student student = IStudentDao.findStudentById(id);
 
-                            if( student != null ) {
+                        if (student != null) {
                             String studentJSON = JSONConverter.studentToJson(student);
                             socketWriter.println(studentJSON);
-                            }
-                            else{
-                                socketWriter.println("Student with that student ID not found");
-                            }
+                        } else {
+                            socketWriter.println("Student with that student ID not found");
                         }
-                        catch( DaoException e )
-                        {
-                            e.printStackTrace();
-                        }
-                        System.out.println("Server message: Student sent to client.");
-                    } else if (request.startsWith(Protocol_Constants.DISPLAY_COURSE_BY_ID)) {
-                        try
-                        {
-                            CourseDAOInterface ICourseDao = new MySqlCourseDAO();
-                            int id;
-                            id = Integer.valueOf(request.substring(20));
-                            Course cs = ICourseDao.findCourseById(id);
+                    } catch (DaoException e) {
+                        e.printStackTrace();
+                    }
+                    System.out.println("Server message: Student sent to client.");
+                } else if (request.startsWith(Protocol_Constants.DISPLAY_COURSE_BY_ID)) {
+                    try {
+                        CourseDAOInterface ICourseDao = new MySqlCourseDAO();
+                        int id;
+                        id = Integer.valueOf(request.substring(20));
+                        Course cs = ICourseDao.findCourseById(id);
 
-                            if( cs != null ) {
-                                String courseJSON = JSONConverter.courseToJson(cs);
-                                socketWriter.println(courseJSON);
-                            }
-                            else{
-                                socketWriter.println("Course with that course ID not found");
-                            }
+                        if (cs != null) {
+                            String courseJSON = JSONConverter.courseToJson(cs);
+                            socketWriter.println(courseJSON);
+                        } else {
+                            socketWriter.println("Course with that course ID not found");
                         }
-                        catch( DaoException e )
-                        {
-                            e.printStackTrace();
-                        }
-                        System.out.println("Server message: Course sent to client.");
-                    } else if (request.startsWith(Protocol_Constants.DISPLAY_DEPARTMENT_BY_ID)) {
-                        try
-                        {
-                            DepartmentDAOInterface IDepartmentDao = new MySqlDepartmentDAO();
-                            int id;
-                            id = Integer.valueOf(request.substring(24));
-                            Department dt = IDepartmentDao.findDepartmentById(id);
+                    } catch (DaoException e) {
+                        e.printStackTrace();
+                    }
+                    System.out.println("Server message: Course sent to client.");
+                } else if (request.startsWith(Protocol_Constants.DISPLAY_DEPARTMENT_BY_ID)) {
+                    try {
+                        DepartmentDAOInterface IDepartmentDao = new MySqlDepartmentDAO();
+                        int id;
+                        id = Integer.valueOf(request.substring(24));
+                        Department dt = IDepartmentDao.findDepartmentById(id);
 
-                            if( dt != null ) {
-                                String departmentJSON = JSONConverter.departmentToJson(dt);
-                                socketWriter.println(departmentJSON);
-                            }
-                            else{
-                                socketWriter.println("Department with that department ID not found");
-                            }
+                        if (dt != null) {
+                            String departmentJSON = JSONConverter.departmentToJson(dt);
+                            socketWriter.println(departmentJSON);
+                        } else {
+                            socketWriter.println("Department with that department ID not found");
                         }
-                        catch( DaoException e )
-                        {
-                            e.printStackTrace();
-                        }
-                        System.out.println("Server message: Department sent to client.");
-                    } else if (request.startsWith(Protocol_Constants.DISPLAY_MODULE_BY_ID)) {
-                        try
-                        {
-                            ModuleDAOInterface IModuleDao = new MySqlModuleDAO();
-                            int id;
-                            id = Integer.valueOf(request.substring(20));
-                            Module md = IModuleDao.findModuleById(id);
+                    } catch (DaoException e) {
+                        e.printStackTrace();
+                    }
+                    System.out.println("Server message: Department sent to client.");
+                } else if (request.startsWith(Protocol_Constants.DISPLAY_MODULE_BY_ID)) {
+                    try {
+                        ModuleDAOInterface IModuleDao = new MySqlModuleDAO();
+                        int id;
+                        id = Integer.valueOf(request.substring(20));
+                        Module md = IModuleDao.findModuleById(id);
 
-                            if( md != null ) {
-                                String moduleJSON = JSONConverter.moduleToJson(md);
-                                socketWriter.println(moduleJSON);
-                            }
-                            else{
-                                socketWriter.println("Module with that module ID not found");
-                            }
+                        if (md != null) {
+                            String moduleJSON = JSONConverter.moduleToJson(md);
+                            socketWriter.println(moduleJSON);
+                        } else {
+                            socketWriter.println("Module with that module ID not found");
                         }
-                        catch( DaoException e )
-                        {
-                            e.printStackTrace();
-                        }
-                        System.out.println("Server message: Module sent to client.");
-                    } else if (request.startsWith(Protocol_Constants.ADD_STUDENT)) {
-                        try {
-                            String json = request.substring(Protocol_Constants.ADD_STUDENT.length());
-                            Gson gson = new Gson();
-                            Student student = gson.fromJson(json, Student.class);
+                    } catch (DaoException e) {
+                        e.printStackTrace();
+                    }
+                    System.out.println("Server message: Module sent to client.");
+                } else if (request.startsWith(Protocol_Constants.ADD_STUDENT)) {
+                    try {
+                        String json = request.substring(Protocol_Constants.ADD_STUDENT.length());
+                        Gson gson = new Gson();
+                        Student student = gson.fromJson(json, Student.class);
 
-                            StudentDaoInterface studentDao = new MySqlStudentDao();
-                            Student addedStudent = studentDao.insertNewStudent(student);
+                        studentDao = new MySqlStudentDao();
+                        Student addedStudent = studentDao.insertNewStudent(student);
 
-                            if (addedStudent != null && addedStudent.getId() != 0) {
-                                String responseJson = gson.toJson(addedStudent);
-                                socketWriter.println(responseJson);
-                            } else {
-                                String errorJson = "{\"error\":\"Failed to add student\",\"message\":\"Operation failed\"}";
-                                socketWriter.println(errorJson);
-                            }
-                        } catch (DaoException e) {
-                            String errorJson = "{\"error\":\"Error adding student\",\"message\":\"" + e.getMessage() + "\"}";
+                        if (addedStudent != null && addedStudent.getId() != 0) {
+                            String responseJson = gson.toJson(addedStudent);
+                            socketWriter.println(responseJson);
+                        } else {
+                            String errorJson = "{\"error\":\"Failed to add student\",\"message\":\"Operation failed\"}";
                             socketWriter.println(errorJson);
                         }
+                    } catch (DaoException e) {
+                        String errorJson = "{\"error\":\"Error adding student\",\"message\":\"" + e.getMessage() + "\"}";
+                        socketWriter.println(errorJson);
                     }
-                    else if (request.startsWith(Protocol_Constants.ADD_COURSE)) {
-                        try {
-                            String json = request.substring(Protocol_Constants.ADD_COURSE.length());
-                            Gson gson = new Gson();
-                            Course course = gson.fromJson(json, Course.class);
+                } else if (request.startsWith(Protocol_Constants.ADD_COURSE)) {
+                    try {
+                        String json = request.substring(Protocol_Constants.ADD_COURSE.length());
+                        Gson gson = new Gson();
+                        Course course = gson.fromJson(json, Course.class);
 
-                            CourseDAOInterface courseDao = new MySqlCourseDAO();
-                            Course addedCourse = courseDao.insertNewCourse(course);
+                        CourseDAOInterface courseDao = new MySqlCourseDAO();
+                        Course addedCourse = courseDao.insertNewCourse(course);
 
-                            if (addedCourse != null && addedCourse.getCourseID() != 0) {
-                                String responseJson = gson.toJson(addedCourse);
-                                socketWriter.println(responseJson);
-                            } else {
-                                String errorJson = "{\"error\":\"Failed to add course\",\"message\":\"Operation failed\"}";
-                                socketWriter.println(errorJson);
-                            }
-                        } catch (DaoException e) {
-                            String errorJson = "{\"error\":\"Error adding course\",\"message\":\"" + e.getMessage() + "\"}";
+                        if (addedCourse != null && addedCourse.getCourseID() != 0) {
+                            String responseJson = gson.toJson(addedCourse);
+                            socketWriter.println(responseJson);
+                        } else {
+                            String errorJson = "{\"error\":\"Failed to add course\",\"message\":\"Operation failed\"}";
                             socketWriter.println(errorJson);
                         }
+                    } catch (DaoException e) {
+                        String errorJson = "{\"error\":\"Error adding course\",\"message\":\"" + e.getMessage() + "\"}";
+                        socketWriter.println(errorJson);
                     }
-                    else if (request.startsWith(Protocol_Constants.ADD_DEPARTMENT)) {
-                        try {
-                            String json = request.substring(Protocol_Constants.ADD_DEPARTMENT.length());
-                            Gson gson = new Gson();
-                            Department department = gson.fromJson(json, Department.class);
+                } else if (request.startsWith(Protocol_Constants.ADD_DEPARTMENT)) {
+                    try {
+                        String json = request.substring(Protocol_Constants.ADD_DEPARTMENT.length());
+                        Gson gson = new Gson();
+                        Department department = gson.fromJson(json, Department.class);
 
-                            DepartmentDAOInterface departmentDao = new MySqlDepartmentDAO();
-                            Department addedDepartment = departmentDao.insertNewDepartment(department);
+                        DepartmentDAOInterface departmentDao = new MySqlDepartmentDAO();
+                        Department addedDepartment = departmentDao.insertNewDepartment(department);
 
-                            if (addedDepartment != null && addedDepartment.getDepartmentID() != 0) {
-                                String responseJson = gson.toJson(addedDepartment);
-                                socketWriter.println(responseJson);
-                            } else {
-                                String errorJson = "{\"error\":\"Failed to add department\",\"message\":\"Operation failed\"}";
-                                socketWriter.println(errorJson);
-                            }
-                        } catch (DaoException e) {
-                            String errorJson = "{\"error\":\"Error adding department\",\"message\":\"" + e.getMessage() + "\"}";
+                        if (addedDepartment != null && addedDepartment.getDepartmentID() != 0) {
+                            String responseJson = gson.toJson(addedDepartment);
+                            socketWriter.println(responseJson);
+                        } else {
+                            String errorJson = "{\"error\":\"Failed to add department\",\"message\":\"Operation failed\"}";
                             socketWriter.println(errorJson);
                         }
+                    } catch (DaoException e) {
+                        String errorJson = "{\"error\":\"Error adding department\",\"message\":\"" + e.getMessage() + "\"}";
+                        socketWriter.println(errorJson);
                     }
-                    else if (request.startsWith(Protocol_Constants.ADD_MODULE)) {
-                        try {
-                            String json = request.substring(Protocol_Constants.ADD_MODULE.length());
-                            Gson gson = new Gson();
-                            Module module = gson.fromJson(json, Module.class);
+                } else if (request.startsWith(Protocol_Constants.ADD_MODULE)) {
+                    try {
+                        String json = request.substring(Protocol_Constants.ADD_MODULE.length());
+                        Gson gson = new Gson();
+                        Module module = gson.fromJson(json, Module.class);
 
-                            ModuleDAOInterface moduleDao = new MySqlModuleDAO();
-                            Module addedModule = moduleDao.insertNewModule(module);
+                        ModuleDAOInterface moduleDao = new MySqlModuleDAO();
+                        Module addedModule = moduleDao.insertNewModule(module);
 
-                            if (addedModule != null && addedModule.getModuleID() != 0) {
-                                String responseJson = gson.toJson(addedModule);
-                                socketWriter.println(responseJson);
-                            } else {
-                                String errorJson = "{\"error\":\"Failed to add module\",\"message\":\"Operation failed\"}";
-                                socketWriter.println(errorJson);
-                            }
-                        } catch (DaoException e) {
-                            String errorJson = "{\"error\":\"Error adding module\",\"message\":\"" + e.getMessage() + "\"}";
+                        if (addedModule != null && addedModule.getModuleID() != 0) {
+                            String responseJson = gson.toJson(addedModule);
+                            socketWriter.println(responseJson);
+                        } else {
+                            String errorJson = "{\"error\":\"Failed to add module\",\"message\":\"Operation failed\"}";
                             socketWriter.println(errorJson);
                         }
+                    } catch (DaoException e) {
+                        String errorJson = "{\"error\":\"Error adding module\",\"message\":\"" + e.getMessage() + "\"}";
+                        socketWriter.println(errorJson);
                     }
-                    else if (request.startsWith(Protocol_Constants.DISPLAY_ALL_STUDENTS))
-                    {
-                        try
-                        {
+                } else if (request.startsWith(Protocol_Constants.DISPLAY_ALL_STUDENTS)) {
+                    try {
 
-                            StudentDaoInterface IStudentDao = new MySqlStudentDao();
-                            List<Student> students = IStudentDao.findAllStudents();
-                            if (students.isEmpty())
-                            {
-                                socketWriter.println("There are no students");
-                            }
-                            else
-                            {
-                                String studentListJSON = JSONConverter.studentsListToJson(students);
+                        StudentDaoInterface IStudentDao = new MySqlStudentDao();
+                        List<Student> students = IStudentDao.findAllStudents();
+                        if (students.isEmpty()) {
+                            socketWriter.println("There are no students");
+                        } else {
+                            String studentListJSON = JSONConverter.studentsListToJson(students);
 
 
-                                //System.out.println("JSON Response: " + studentListJSON);
+                            //System.out.println("JSON Response: " + studentListJSON);
 
-                                socketWriter.println(studentListJSON);
-                            }
+                            socketWriter.println(studentListJSON);
                         }
-
-                        catch (DaoException e)
-                        {
-                            e.printStackTrace();
-                            socketWriter.println("Error retrieving students");
-                        }
+                    } catch (DaoException e) {
+                        e.printStackTrace();
+                        socketWriter.println("Error retrieving students");
                     }
-                    else if (request.startsWith(Protocol_Constants.DISPLAY_ALL_COURSES))
-                    {
-                        try
-                        {
-                            CourseDAOInterface ICourseDao = new MySqlCourseDAO();
+                } else if (request.startsWith(Protocol_Constants.DISPLAY_ALL_COURSES)) {
+                    try {
+                        CourseDAOInterface ICourseDao = new MySqlCourseDAO();
 
-                            List<Course> courses = ICourseDao.findAllCourses();
-                            if (courses.isEmpty())
-                            {
-                                socketWriter.println("There are no students");
-                            }
-                            else
-                            {
-                                String courseListJSON = JSONConverter.coursesListToJson(courses);
+                        List<Course> courses = ICourseDao.findAllCourses();
+                        if (courses.isEmpty()) {
+                            socketWriter.println("There are no students");
+                        } else {
+                            String courseListJSON = JSONConverter.coursesListToJson(courses);
 
 
-
-
-                                socketWriter.println(courseListJSON);
-                            }
+                            socketWriter.println(courseListJSON);
                         }
-                        catch (DaoException e)
-                        {
-                            e.printStackTrace();
-                            socketWriter.println("Error retrieving courses");
-                        }}
-                    else if (request.startsWith(Protocol_Constants.DISPLAY_ALL_DEPARTMENTS))
-                    {
-                        try
-                        {
-                            DepartmentDAOInterface IDepartmentDao =new MySqlDepartmentDAO();
+                    } catch (DaoException e) {
+                        e.printStackTrace();
+                        socketWriter.println("Error retrieving courses");
+                    }
+                } else if (request.startsWith(Protocol_Constants.DISPLAY_ALL_DEPARTMENTS)) {
+                    try {
+                        DepartmentDAOInterface IDepartmentDao = new MySqlDepartmentDAO();
 
-                            List<Department> departments = IDepartmentDao.findAllDepartments();
-                            if (departments.isEmpty())
-                            {
-                                socketWriter.println("There are no departments");
-                            }
-                            else
-                            {
-                                String departmentListJSON = JSONConverter.departmentsListToJson(departments);
+                        List<Department> departments = IDepartmentDao.findAllDepartments();
+                        if (departments.isEmpty()) {
+                            socketWriter.println("There are no departments");
+                        } else {
+                            String departmentListJSON = JSONConverter.departmentsListToJson(departments);
 
 
-
-
-                                socketWriter.println(departmentListJSON);
-                            }
+                            socketWriter.println(departmentListJSON);
                         }
-                        catch (DaoException e)
-                        {
-                            e.printStackTrace();
-                            socketWriter.println("Error retrieving departments");
-                        }}
-                    else if (request.startsWith(Protocol_Constants.DISPLAY_ALL_MODULES)) {
-                        try
-                        {
-                            ModuleDAOInterface IModuleDao = new MySqlModuleDAO();
+                    } catch (DaoException e) {
+                        e.printStackTrace();
+                        socketWriter.println("Error retrieving departments");
+                    }
+                } else if (request.startsWith(Protocol_Constants.DISPLAY_ALL_MODULES)) {
+                    try {
+                        ModuleDAOInterface IModuleDao = new MySqlModuleDAO();
 
-                            List<Module> modules = IModuleDao.findAllModules();
-                            if (modules.isEmpty())
-                            {
-                                socketWriter.println("There are no modules");
-                            }
-                            else
-                            {
-                                String moduleListJSON = JSONConverter.modulesListToJson(modules);
+                        List<Module> modules = IModuleDao.findAllModules();
+                        if (modules.isEmpty()) {
+                            socketWriter.println("There are no modules");
+                        } else {
+                            String moduleListJSON = JSONConverter.modulesListToJson(modules);
 
-                                socketWriter.println(moduleListJSON);
-                            }
+                            socketWriter.println(moduleListJSON);
                         }
-                        catch (DaoException e)
-                        {
-                            e.printStackTrace();
-                            socketWriter.println("Error retrieving modules");
-                        }} else if (request.startsWith(Protocol_Constants.GET_ALL_IMAGES)) {
+                    } catch (DaoException e) {
+                        e.printStackTrace();
+                        socketWriter.println("Error retrieving modules");
+                    }
+                } else if (request.startsWith(Protocol_Constants.GET_ALL_IMAGES)) {
 
-                        try {
-                            imgList = Files.list(Paths.get("src/main/java/com/dkit/oop/sd2/Server/StudentImages/"))
-                                    .filter(Files::isRegularFile)
-                                    .map(Path::getFileName)
-                                    .map(Path::toString)
-                                    .toArray(String[]::new);
-                            String imagesList = JSONConverter.imageListToJson(imgList);
-                            socketWriter.println(imagesList);
-                        } catch (IOException e) {
-                            e.printStackTrace();
-                        }
-                    } else if (request.startsWith("GET_IMG_")) {
-                        int imgIndex = Integer.parseInt(request.substring(8));
-                        dataInputStream = new DataInputStream(clientSocket.getInputStream());
-                        dataOutputStream = new DataOutputStream( clientSocket.getOutputStream());
+                    try {
+                        imgList = Files.list(Paths.get("src/main/java/com/dkit/oop/sd2/Server/StudentImages/"))
+                                .filter(Files::isRegularFile)
+                                .map(Path::getFileName)
+                                .map(Path::toString)
+                                .toArray(String[]::new);
+                        String imagesList = JSONConverter.imageListToJson(imgList);
+                        socketWriter.println(imagesList);
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
+                } else if (request.startsWith("GET_IMG_")) {
+                    int imgIndex = Integer.parseInt(request.substring(8));
+                    dataInputStream = new DataInputStream(clientSocket.getInputStream());
+                    dataOutputStream = new DataOutputStream(clientSocket.getOutputStream());
 
 //                        imgList[imgIndex];
-                        System.out.println("Sending the File to the Client");
-                        // Call SendFile Method
-                        try{
-                            sendFile("src/main/java/com/dkit/oop/sd2/Server/StudentImages/"+imgList[imgIndex]);   // hardcode location for convenience
-                        } catch (Exception e){
-                            e.printStackTrace();
-                        }
-                        dataInputStream.close();
-                        dataInputStream.close();
-                    } else if (request.startsWith("quit"))
-                {
+                    System.out.println("Sending the File to the Client");
+                    // Call SendFile Method
+                    try {
+                        sendFile("src/main/java/com/dkit/oop/sd2/Server/StudentImages/" + imgList[imgIndex]);   // hardcode location for convenience
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
+                    dataInputStream.close();
+                    dataInputStream.close();
+                } else if (request.startsWith(Protocol_Constants.DELETE_STUDENT_BY_ID)) {
+                    StudentDaoInterface studentDao1 = new MySqlStudentDao();
+                    int id = Integer.parseInt(request.split(" ")[1]);
+                    int result = studentDao1.deleteStudentById(id);
+                    socketWriter.println(result > 0 ? "{\"message\":\"Student deleted successfully.\"}" : "{\"message\":\"Failed to delete student.\"}");
+                }
+                else if (request.startsWith(Protocol_Constants.DELETE_COURSE_BY_ID)) {
+                    CourseDAOInterface courseDao = new MySqlCourseDAO();
+                    int id = Integer.parseInt(request.split(" ")[1]);
+                    int result = courseDao.deleteCourseById(id);
+                    socketWriter.println(result > 0 ? "{\"message\":\"Course deleted successfully.\"}" : "{\"message\":\"Failed to delete course.\"}");
+                }
+                else if (request.startsWith(Protocol_Constants.DELETE_DEPARTMENT_BY_ID)) {
+                    DepartmentDAOInterface departmentDao = new MySqlDepartmentDAO();
+                    int id = Integer.parseInt(request.split(" ")[1]);
+                    int result = departmentDao.deleteDepartmentById(id);
+                    socketWriter.println(result > 0 ? "{\"message\":\"Department deleted successfully.\"}" : "{\"message\":\"Failed to delete department.\"}");
+                }
+                else if (request.startsWith(Protocol_Constants.DELETE_MODULE_BY_ID)) {
+                    ModuleDAOInterface moduleDao = new MySqlModuleDAO();
+                    int id = Integer.parseInt(request.split(" ")[1]);
+                    int result = moduleDao.deleteModuleById(id);
+                    socketWriter.println(result > 0 ? "{\"message\":\"Module deleted successfully.\"}" : "{\"message\":\"Failed to delete module.\"}");
+                }
+                else if (request.startsWith("quit")) {
                     socketWriter.println("Sorry to see you leaving. Goodbye.");
                     System.out.println("Server message: Client has notified us that it is quitting.");
-                }
-                else{
+                } else {
                     socketWriter.println("error I'm sorry I don't understand your request");
                     System.out.println("Server message: Invalid request from client.");
                 }
@@ -426,6 +396,8 @@ class ClientHandler implements Runnable
 //            ex.printStackTrace();
             System.out.println("Client might have disconeected");
 
+        } catch (DaoException e) {
+            throw new RuntimeException(e);
         } finally {
             this.socketWriter.close();
             try {

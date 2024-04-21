@@ -203,7 +203,7 @@ public class MySqlDepartmentDAO extends MySqlDao implements DepartmentDAOInterfa
         try
         {
             connection = this.getConnection();
-            String query = "DELETE * FROM Department WHERE Department_id = ?";
+            String query = "DELETE FROM Departments WHERE department_id = ?";
             preparedStatement = connection.prepareStatement(query);
             preparedStatement.setInt(1, id);
             affectedRows = preparedStatement.executeUpdate();
