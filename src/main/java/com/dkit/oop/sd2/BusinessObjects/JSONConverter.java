@@ -20,7 +20,6 @@ public class JSONConverter {
     public static String studentToJson( Student s ){
         Gson gsonParser = new Gson();
         String studentJSON =  gsonParser.toJson(s);
-//        System.out.println("Student JSON String is:\n" + studentJSON);
         return studentJSON;
     }
     /**
@@ -110,5 +109,11 @@ public class JSONConverter {
         Gson gsonParser = new Gson();
         String imageListJson = gsonParser.toJson(imageList);
         return imageListJson;
+    }
+
+    public static String msgToJson(String msg){
+        Gson gsonParser = new Gson();
+        String msgJson = gsonParser.toJson(msg);
+        return msgJson;
     }
 }
